@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'contact_screen.dart';
 import 'home_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _MainScreenState extends State<MainScreen> {
     HomeScreen(),
     _PlaceholderPage(label: 'Services'),
     _PlaceholderPage(label: 'Clinics'),
-    _PlaceholderPage(label: 'Contact'),
+    ContactScreen(),
     _PlaceholderPage(label: 'About'),
   ];
 
@@ -47,7 +48,7 @@ class _BottomNav extends StatelessWidget {
       _NavItem(label: 'Home', icon: Icons.home_outlined, activeIcon: Icons.home),
       _NavItem(label: 'Services', icon: Icons.medical_services_outlined, activeIcon: Icons.medical_services),
       _NavItem(label: 'Clinics', icon: Icons.location_on_outlined, activeIcon: Icons.location_on),
-      _NavItem(label: 'Contact', icon: Icons.phone_outlined, activeIcon: Icons.phone),
+      _NavItem(label: 'Consult', icon: Icons.phone_outlined, activeIcon: Icons.phone),
       _NavItem(label: 'About', icon: Icons.person_outline, activeIcon: Icons.person),
     ];
 
