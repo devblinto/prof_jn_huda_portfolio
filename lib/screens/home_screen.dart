@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -6,9 +7,14 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFFDF8F5),
-      body: SafeArea(
+    // No nested Scaffold — MainScreen already provides Scaffold + bottom nav.
+    return ColoredBox(
+      color: const Color(0xFFFDF8F5),
+      child: SafeArea(
+        top: false,
+        bottom: true,
+        left: false,
+        right: false,
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,148 +38,238 @@ class HomeScreen extends StatelessWidget {
 class _HeroCard extends StatelessWidget {
   const _HeroCard();
 
+  static const _radius = 8.0;
+  static const _bannerHeight = 258.0;
+  static const _ctaRowHeight = 50.0;
+  /// Cream strip under banner; fits bottom half of overlapped CTAs + gap.
+  static const _ctaStripExtension = _ctaRowHeight / 2 + 14;
+  static const _cardShell = Color(0xFFF3EBE4);
+  static const _ctaStrip = Color(0xFFFDF8F5);
+  static const _ctaBg = Color(0xFFE6D5C8);
+  static const _ctaFg = Color(0xFF4A3F38);
+  static const _ctaShadow = BoxShadow(
+    color: Color(0x14000000),
+    blurRadius: 8,
+    offset: Offset(0, 3),
+  );
+  static const _avatarBorder = Color(0xFFD4B483);
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+    final statusTop = MediaQuery.paddingOf(context).top;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: _cardShell,
+        borderRadius: const BorderRadius.vertical(
+          bottom: Radius.circular(_radius),
+        ),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x12000000),
+            blurRadius: 12,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: const BorderRadius.vertical(
+          bottom: Radius.circular(_radius),
+        ),
         child: SizedBox(
-          height: 210,
+          height: _bannerHeight + _ctaStripExtension,
           child: Stack(
-            fit: StackFit.expand,
+            clipBehavior: Clip.none,
             children: [
-              // Background — splash image reused as hero background
-              Image.asset(
-                'assets/images/Screen Splash_without_logo.webp',
-                fit: BoxFit.cover,
-              ),
-
-              // Dark gradient overlay
-              Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Color(0xCC000000),
-                      Color(0x66000000),
-                    ],
-                  ),
-                ),
-              ),
-
-              // Content
-              Padding(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Brand
-                    const Text(
-                      'SKINN',
-                      style: TextStyle(
-                        color: Color(0xFFC9A84C),
-                        fontSize: 26,
-                        fontWeight: FontWeight.w300,
-                        letterSpacing: 6,
-                      ),
-                    ),
-                    const Text(
-                      'BY PROF. M.N HUDA',
-                      style: TextStyle(
-                        color: Color(0xFFD4B483),
-                        fontSize: 9,
-                        letterSpacing: 3,
-                      ),
-                    ),
-
-                    const Spacer(),
-
-                    // Doctor info row
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 22,
-                          backgroundColor: const Color(0xFFC9A84C),
-                          child: const Icon(
-                            Icons.person,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'Prof. M.N. Huda',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: _bannerHeight,
+                        child: Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            Image.asset(
+                              'assets/images/home-banner.png',
+                              fit: BoxFit.cover,
+                              alignment: Alignment.center,
+                            ),
+                            DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Colors.black.withValues(alpha: 0.52),
+                                    Colors.black.withValues(alpha: 0.36),
+                                  ],
+                                ),
                               ),
                             ),
-                            Text(
-                              'Dermatologist & Venereologist',
-                              style: TextStyle(
-                                color: Color(0xFFCCCCCC),
-                                fontSize: 11,
+                            Positioned(
+                              top: statusTop + 8,
+                              left: 16,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'SKINN',
+                                    style: GoogleFonts.playfairDisplay(
+                                      color: Colors.white,
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.w700,
+                                      letterSpacing: 5,
+                                      height: 1.0,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    'BY PROF. M N HUDA',
+                                    style: TextStyle(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.95,
+                                      ),
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: 3.2,
+                                      height: 1.2,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Text(
-                              '40+ Years Of Excellence',
-                              style: TextStyle(
-                                color: Color(0xFFAAAAAA),
-                                fontSize: 10,
+                            Positioned(
+                              left: 16,
+                              right: 16,
+                              bottom: 58,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 54,
+                                    height: 54,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: _avatarBorder,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: ClipOval(
+                                      child: Image.asset(
+                                        'assets/images/prof.png',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          'Prof. M.N. Huda',
+                                          style: GoogleFonts.playfairDisplay(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            height: 1.2,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 3),
+                                        Text(
+                                          'Dermatologist & Venereologist',
+                                          style: TextStyle(
+                                            color: Colors.white.withValues(
+                                              alpha: 0.92,
+                                            ),
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w400,
+                                            height: 1.25,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 3),
+                                        Text(
+                                          '45+ Years Of Excellence',
+                                          style: TextStyle(
+                                            color: Colors.white.withValues(
+                                              alpha: 0.78,
+                                            ),
+                                            fontSize: 10.5,
+                                            fontWeight: FontWeight.w500,
+                                            height: 1.2,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ],
                         ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 14),
-
-                    // Action buttons
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _HeroButton(
-                            icon: Icons.calendar_month_outlined,
-                            label: 'Book Appointment',
-                            onTap: () {},
-                          ),
+                      ),
+                      ColoredBox(
+                        color: _ctaStrip,
+                        child: SizedBox(
+                          height: _ctaStripExtension,
+                          width: double.infinity,
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: _HeroButton(
-                            icon: Icons.location_on_outlined,
-                            label: 'Find Clinics',
-                            onTap: () {},
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+                Positioned(
+                  top: _bannerHeight - _ctaRowHeight / 2,
+                  left: 16,
+                  right: 16,
+                  height: _ctaRowHeight,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: _HeroCtaButton(
+                          svgAsset: 'assets/Icons/book-appoinment.svg',
+                          label: 'Book Appointment',
+                          onTap: () {},
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _HeroCtaButton(
+                          svgAsset: 'assets/Icons/location.svg',
+                          label: 'Find Clinics',
+                          onTap: () {},
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
     );
   }
 }
 
-class _HeroButton extends StatelessWidget {
-  const _HeroButton({
-    required this.icon,
+class _HeroCtaButton extends StatelessWidget {
+  const _HeroCtaButton({
+    required this.svgAsset,
     required this.label,
     required this.onTap,
   });
 
-  final IconData icon;
+  static const _iconSize = 19.0;
+
+  final String svgAsset;
   final String label;
   final VoidCallback onTap;
 
@@ -181,27 +277,55 @@ class _HeroButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 9),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.15),
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.white.withOpacity(0.3), width: 0.8),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: Colors.white, size: 15),
-            const SizedBox(width: 6),
-            Text(
-              label,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 11.5,
-                fontWeight: FontWeight.w500,
+      child: SizedBox.expand(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: _HeroCard._ctaBg,
+            borderRadius: BorderRadius.circular(_HeroCard._radius),
+            boxShadow: const [_HeroCard._ctaShadow],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Center(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.center,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: _iconSize + 2,
+                      height: _iconSize + 2,
+                      child: Center(
+                        child: SvgPicture.asset(
+                          svgAsset,
+                          width: _iconSize,
+                          height: _iconSize,
+                          colorFilter: const ColorFilter.mode(
+                            _HeroCard._ctaFg,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      label,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        color: _HeroCard._ctaFg,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                        height: 1.1,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

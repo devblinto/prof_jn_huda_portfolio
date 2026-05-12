@@ -16,8 +16,9 @@ class ProfMnHudaApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFFC9A84C),
-          brightness: Brightness.dark,
+          brightness: Brightness.light,
         ),
+        scaffoldBackgroundColor: const Color(0xFFFDF8F5),
         useMaterial3: true,
       ),
       home: const SplashScreen(),
