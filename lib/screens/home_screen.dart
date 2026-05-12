@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import '../theme/app_typography.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -47,11 +48,6 @@ class _HeroCard extends StatelessWidget {
   static const _ctaStrip = Color(0xFFFDF8F5);
   static const _ctaBg = Color(0xFFE6D5C8);
   static const _ctaFg = Color(0xFF4A3F38);
-  static const _ctaShadow = BoxShadow(
-    color: Color(0x14000000),
-    blurRadius: 8,
-    offset: Offset(0, 3),
-  );
   static const _avatarBorder = Color(0xFFD4B483);
 
   @override
@@ -64,13 +60,6 @@ class _HeroCard extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(
           bottom: Radius.circular(_radius),
         ),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x12000000),
-            blurRadius: 12,
-            offset: Offset(0, 4),
-          ),
-        ],
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.vertical(
@@ -105,23 +94,23 @@ class _HeroCard extends StatelessWidget {
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter,
                                   colors: [
-                                    Colors.black.withValues(alpha: 0.52),
-                                    Colors.black.withValues(alpha: 0.36),
+                                    Colors.black.withValues(alpha: 0.28),
+                                    Colors.black.withValues(alpha: 0.18),
                                   ],
                                 ),
                               ),
                             ),
                             Positioned(
-                              top: statusTop + 8,
+                              top: statusTop + 40,
                               left: 16,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'SKINN',
-                                    style: GoogleFonts.playfairDisplay(
+                                    style: AppFonts.silkSerif(
                                       color: Colors.white,
-                                      fontSize: 30,
+                                      fontSize: 28,
                                       fontWeight: FontWeight.w700,
                                       letterSpacing: 5,
                                       height: 1.0,
@@ -130,12 +119,12 @@ class _HeroCard extends StatelessWidget {
                                   const SizedBox(height: 6),
                                   Text(
                                     'BY PROF. M N HUDA',
-                                    style: TextStyle(
+                                    style: AppFonts.poppins(
                                       color: Colors.white.withValues(
                                         alpha: 0.95,
                                       ),
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w400,
                                       letterSpacing: 3.2,
                                       height: 1.2,
                                     ),
@@ -176,9 +165,9 @@ class _HeroCard extends StatelessWidget {
                                       children: [
                                         Text(
                                           'Prof. M.N. Huda',
-                                          style: GoogleFonts.playfairDisplay(
+                                          style: AppFonts.silkSerif(
                                             color: Colors.white,
-                                            fontSize: 16,
+                                            fontSize: 18,
                                             fontWeight: FontWeight.w700,
                                             height: 1.2,
                                           ),
@@ -186,7 +175,7 @@ class _HeroCard extends StatelessWidget {
                                         const SizedBox(height: 3),
                                         Text(
                                           'Dermatologist & Venereologist',
-                                          style: TextStyle(
+                                          style: AppFonts.poppins(
                                             color: Colors.white.withValues(
                                               alpha: 0.92,
                                             ),
@@ -198,12 +187,12 @@ class _HeroCard extends StatelessWidget {
                                         const SizedBox(height: 3),
                                         Text(
                                           '45+ Years Of Excellence',
-                                          style: TextStyle(
+                                          style: AppFonts.poppins(
                                             color: Colors.white.withValues(
                                               alpha: 0.78,
                                             ),
-                                            fontSize: 10.5,
-                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400,
                                             height: 1.2,
                                           ),
                                         ),
@@ -282,7 +271,6 @@ class _HeroCtaButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: _HeroCard._ctaBg,
             borderRadius: BorderRadius.circular(_HeroCard._radius),
-            boxShadow: const [_HeroCard._ctaShadow],
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -314,9 +302,9 @@ class _HeroCtaButton extends StatelessWidget {
                     Text(
                       label,
                       maxLines: 1,
-                      style: const TextStyle(
+                      style: AppFonts.poppins(
                         color: _HeroCard._ctaFg,
-                        fontSize: 12,
+                        fontSize: 10,
                         fontWeight: FontWeight.w500,
                         height: 1.1,
                       ),
@@ -376,27 +364,27 @@ class _ServicesSection extends StatelessWidget {
             children: [
               Text(
                 'Services',
-                style: GoogleFonts.playfairDisplay(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF1A1A1A),
-                  height: 1.1,
+                style: AppFonts.silkSerif(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFF000000),
+                  height: 1.15,
                 ),
               ),
               GestureDetector(
                 onTap: () {},
-                child: const Row(
+                child: Row(
                   children: [
                     Text(
                       'View All',
-                      style: TextStyle(
+                      style: AppFonts.poppins(
                         fontSize: 12,
-                        color: Color(0xFF6B6B6B),
+                        color: const Color(0xFF6B6B6B),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(width: 2),
-                    Icon(
+                    const SizedBox(width: 2),
+                    const Icon(
                       Icons.chevron_right,
                       size: 18,
                       color: Color(0xFF6B6B6B),
@@ -406,7 +394,7 @@ class _ServicesSection extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 0),
 
           GridView.builder(
             shrinkWrap: true,
@@ -508,10 +496,10 @@ class _ServiceCard extends StatelessWidget {
                   label,
                   maxLines: 1,
                   softWrap: false,
-                  style: const TextStyle(
+                  style: AppFonts.poppins(
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
-                    color: Color(0xFF5A5A5A),
+                    color: const Color(0xFF5A5A5A),
                     height: 1.0,
                   ),
                   textAlign: TextAlign.center,
@@ -533,46 +521,51 @@ class _LatestUpdatesSection extends StatelessWidget {
 
   static const _updates = [
     _UpdateItem(
-      discount: '25%',
       title: 'Spring Offer',
       subtitle: 'Enjoy 25% off all Laser Hair Removal packages',
-      date: '24 April 2025 - 30 April 2025',
+      date: '24 April 2026 – 30 April 2026',
     ),
     _UpdateItem(
-      discount: '25%',
       title: 'Spring Offer',
       subtitle: 'Enjoy 15% off all Laser Hair Removal packages',
-      date: '24 April 2025 - 30 April 2025',
+      date: '24 April 2026 – 30 April 2026',
     ),
     _UpdateItem(
-      discount: '25%',
       title: 'Spring Offer',
       subtitle: 'Enjoy 15% off all Laser Hair Removal packages',
-      date: '24 April 2025 - 30 April 2025',
+      date: '24 April 2026 – 30 April 2026',
     ),
   ];
 
+  static const _sectionBg = Color(0xFFF8F4F0);
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Latest updates',
-            style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w700,
-              color: Color(0xFF1A1A1A),
+    return ColoredBox(
+      color: _sectionBg,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Latest updates',
+              style: AppFonts.silkSerif(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF000000),
+                height: 1.15,
+              ),
             ),
-          ),
-          const SizedBox(height: 12),
-          ..._updates.map((u) => Padding(
-                padding: const EdgeInsets.only(bottom: 10),
+            const SizedBox(height: 16),
+            ..._updates.map(
+              (u) => Padding(
+                padding: const EdgeInsets.only(bottom: 14),
                 child: _UpdateCard(item: u),
-              )),
-        ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -580,13 +573,11 @@ class _LatestUpdatesSection extends StatelessWidget {
 
 class _UpdateItem {
   const _UpdateItem({
-    required this.discount,
     required this.title,
     required this.subtitle,
     required this.date,
   });
 
-  final String discount;
   final String title;
   final String subtitle;
   final String date;
@@ -595,81 +586,100 @@ class _UpdateItem {
 class _UpdateCard extends StatelessWidget {
   const _UpdateCard({required this.item});
 
+  static const _badgeAsset = 'assets/Icons/25%.png';
+  static const _badgeBg = Color(0xFFB68D74);
+  static const _divider = Color(0xFFE5DDD6);
+
   final _UpdateItem item;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
+    const radius = 22.0;
+    const badgeSize = 72.0;
+    const badgeInnerRadius = 8.0;
+
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(radius),
+        border: Border.all(
+          width: 1,
+          color: const Color(0xFFEEE0D6),
+        ),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x0A000000),
-            blurRadius: 8,
-            offset: Offset(0, 2),
+            color: Color(0x10000000),
+            blurRadius: 14,
+            offset: Offset(0, 4),
           ),
         ],
       ),
-      child: Row(
-        children: [
-          // Discount badge
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: const Color(0xFFF5EDE4),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(
-              child: Text(
-                item.discount,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFFC49A78),
-                ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: badgeSize,
+              height: badgeSize,
+              decoration: BoxDecoration(
+                color: _badgeBg,
+                borderRadius: BorderRadius.circular(badgeInnerRadius),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Image.asset(
+                _badgeAsset,
+                fit: BoxFit.contain,
               ),
             ),
-          ),
-          const SizedBox(width: 12),
-
-          // Text
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  item.title,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF1A1A1A),
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  item.subtitle,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: Color(0xFF888888),
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  item.date,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: Color(0xFFAAAAAA),
-                  ),
-                ),
-              ],
+            const SizedBox(width: 14),
+            Container(
+              width: 1,
+              height: 56,
+              color: _divider,
             ),
-          ),
-        ],
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    item.title,
+                    style: AppFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF4F3F35),
+                      height: 1.25,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    item.subtitle,
+                    style: AppFonts.poppins(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFF605851),
+                      height: 1.35,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    item.date,
+                    style: AppFonts.poppins(
+                      fontSize: 8,
+                      fontWeight: FontWeight.w400,
+                      color: const Color(0xFFA3948A),
+                      height: 1.2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
