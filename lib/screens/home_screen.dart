@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -213,12 +214,30 @@ class _ServicesSection extends StatelessWidget {
   const _ServicesSection();
 
   static const _services = [
-    'Clinical Facial',
-    'Laser Hair Removal',
-    'Exosomes + PDRN',
-    'Clinical Facial',
-    'Laser Hair Removal',
-    'Exosomes + PDRN',
+    _ServiceItem(
+      label: 'Clinical Facial',
+      assetPath: 'assets/Swervice/clinicalfacial.png',
+    ),
+    _ServiceItem(
+      label: 'Laser Hair Removal',
+      assetPath: 'assets/Swervice/Laser Hair Removal.png',
+    ),
+    _ServiceItem(
+      label: 'Exosomes + PDRN',
+      assetPath: 'assets/Swervice/Exosomes + PDRN.png',
+    ),
+    _ServiceItem(
+      label: 'Clinical Facial',
+      assetPath: 'assets/Swervice/clinicalfacial.png',
+    ),
+    _ServiceItem(
+      label: 'Laser Hair Removal',
+      assetPath: 'assets/Swervice/Laser Hair Removal.png',
+    ),
+    _ServiceItem(
+      label: 'Exosomes + PDRN',
+      assetPath: 'assets/Swervice/Exosomes + PDRN.png',
+    ),
   ];
 
   @override
@@ -227,16 +246,17 @@ class _ServicesSection extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          // Header row
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              const Text(
+              Text(
                 'Services',
-                style: TextStyle(
-                  fontSize: 17,
+                style: GoogleFonts.playfairDisplay(
+                  fontSize: 22,
                   fontWeight: FontWeight.w700,
-                  color: Color(0xFF1A1A1A),
+                  color: const Color(0xFF1A1A1A),
+                  height: 1.1,
                 ),
               ),
               GestureDetector(
@@ -247,32 +267,37 @@ class _ServicesSection extends StatelessWidget {
                       'View All',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xFFC49A78),
+                        color: Color(0xFF6B6B6B),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     SizedBox(width: 2),
-                    Icon(Icons.chevron_right,
-                        size: 16, color: Color(0xFFC49A78)),
+                    Icon(
+                      Icons.chevron_right,
+                      size: 18,
+                      color: Color(0xFF6B6B6B),
+                    ),
                   ],
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 20),
 
-          // 2-row grid of 3 columns
           GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: _services.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-              childAspectRatio: 0.85,
+              mainAxisSpacing: 20,
+              crossAxisSpacing: 20,
+              mainAxisExtent: _ServiceCard.gridMainAxisExtent,
             ),
-            itemBuilder: (_, i) => _ServiceCard(label: _services[i]),
+            itemBuilder: (_, i) {
+              final s = _services[i];
+              return _ServiceCard(label: s.label, assetPath: s.assetPath);
+            },
           ),
         ],
       ),
@@ -280,48 +305,99 @@ class _ServicesSection extends StatelessWidget {
   }
 }
 
-class _ServiceCard extends StatelessWidget {
-  const _ServiceCard({required this.label});
+class _ServiceItem {
+  const _ServiceItem({required this.label, required this.assetPath});
 
   final String label;
+  final String assetPath;
+}
+
+class _ServiceCard extends StatelessWidget {
+  const _ServiceCard({required this.label, required this.assetPath});
+
+  final String label;
+  final String assetPath;
+
+  static const _radius = 8.0;
+  static const _imageInset = 2.0;
+  static const _imageWidth = 107.0;
+  static const _imageHeight = 91.0;
+  static const _innerTopRadius = _radius - _imageInset;
+
+  /// Matches card content: image frame + label row (for grid row height).
+  static const double gridMainAxisExtent =
+      _imageInset + _imageHeight + _imageInset + 6 + 11 + 10;
+
+  static const _shadow = BoxShadow(
+    color: Color(0x14000000),
+    blurRadius: 10,
+    offset: Offset(0, 4),
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFFE8D5C4),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(_radius),
+        boxShadow: const [_shadow],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(_radius),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                _imageInset,
+                _imageInset,
+                _imageInset,
+                _imageInset,
               ),
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  Image.asset(
-                    'assets/images/Screen Splash_without_logo.webp',
-                    fit: BoxFit.cover,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(_innerTopRadius),
+                    topRight: Radius.circular(_innerTopRadius),
                   ),
-                  Container(color: const Color(0x33000000)),
-                ],
+                  child: ColoredBox(
+                    color: const Color(0xFFF2EDE8),
+                    child: Image.asset(
+                      assetPath,
+                      width: _imageWidth,
+                      height: _imageHeight,
+                      fit: BoxFit.cover,
+                      alignment: Alignment.center,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(6, 6, 6, 10),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.center,
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: Color(0xFF5A5A5A),
+                    height: 1.0,
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 5),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: 10,
-            color: Color(0xFF3A3A3A),
-            fontWeight: FontWeight.w500,
-          ),
-          textAlign: TextAlign.center,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ],
+      ),
     );
   }
 }

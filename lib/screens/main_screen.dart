@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'contact_screen.dart';
 import 'home_screen.dart';
 
@@ -45,11 +47,11 @@ class _BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const items = [
-      _NavItem(label: 'Home', icon: Icons.home_outlined, activeIcon: Icons.home),
-      _NavItem(label: 'Services', icon: Icons.medical_services_outlined, activeIcon: Icons.medical_services),
-      _NavItem(label: 'Clinics', icon: Icons.location_on_outlined, activeIcon: Icons.location_on),
-      _NavItem(label: 'Consult', icon: Icons.phone_outlined, activeIcon: Icons.phone),
-      _NavItem(label: 'About', icon: Icons.person_outline, activeIcon: Icons.person),
+      _NavItem(label: 'Home', assetPath: 'assets/Icons/home_icon.svg'),
+      _NavItem(label: 'Services', assetPath: 'assets/Icons/services.svg'),
+      _NavItem(label: 'Clinics', assetPath: 'assets/Icons/location.svg'),
+      _NavItem(label: 'Contact', assetPath: 'assets/Icons/Contact..svg'),
+      _NavItem(label: 'About', assetPath: 'assets/Icons/user.svg'),
     ];
 
     return Container(
@@ -71,6 +73,9 @@ class _BottomNav extends StatelessWidget {
             children: List.generate(items.length, (i) {
               final item = items[i];
               final active = i == currentIndex;
+              final iconColor = active
+                  ? const Color(0xFFC49A78)
+                  : const Color(0xFF5A5A5A);
               return Expanded(
                 child: GestureDetector(
                   behavior: HitTestBehavior.opaque,
@@ -78,12 +83,14 @@ class _BottomNav extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        active ? item.activeIcon : item.icon,
-                        size: 24,
-                        color: active
-                            ? const Color(0xFFC49A78)
-                            : const Color(0xFF5A5A5A),
+                      SvgPicture.asset(
+                        item.assetPath,
+                        width: 24,
+                        height: 24,
+                        colorFilter: ColorFilter.mode(
+                          iconColor,
+                          BlendMode.srcIn,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -91,9 +98,7 @@ class _BottomNav extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: active ? FontWeight.w600 : FontWeight.w400,
-                          color: active
-                              ? const Color(0xFFC49A78)
-                              : const Color(0xFF5A5A5A),
+                          color: iconColor,
                         ),
                       ),
                     ],
@@ -111,13 +116,11 @@ class _BottomNav extends StatelessWidget {
 class _NavItem {
   const _NavItem({
     required this.label,
-    required this.icon,
-    required this.activeIcon,
+    required this.assetPath,
   });
 
   final String label;
-  final IconData icon;
-  final IconData activeIcon;
+  final String assetPath;
 }
 
 class _PlaceholderPage extends StatelessWidget {
