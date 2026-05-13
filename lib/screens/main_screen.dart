@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'contact_screen.dart';
 import 'home_screen.dart';
+import 'services_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _pages = [
     const HomeScreen(),
-    const _PlaceholderPage(label: 'Services'),
+    const ServicesScreen(),
     const _PlaceholderPage(label: 'Clinics'),
     const ContactScreen(),
     const _PlaceholderPage(label: 'About'),
@@ -49,8 +50,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final overlayStyle =
-        _currentIndex == 0 ? _homeStatusOverlay : _lightScreenStatusOverlay;
+    final overlayStyle = (_currentIndex == 0 || _currentIndex == 1)
+        ? _homeStatusOverlay
+        : _lightScreenStatusOverlay;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: overlayStyle,

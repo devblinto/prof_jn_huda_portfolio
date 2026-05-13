@@ -1,0 +1,1295 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../theme/app_typography.dart';
+
+/// One line in a treatment sub-section grid (e.g. LHR body area, Exosomes service).
+class _SubServiceItem {
+  const _SubServiceItem({
+    required this.title,
+    required this.thumbAsset,
+  });
+
+  final String title;
+  final String thumbAsset;
+}
+
+/// Services / Treatments tab — hero with [services.png], search, category grid.
+class ServicesScreen extends StatefulWidget {
+  const ServicesScreen({super.key});
+
+  @override
+  State<ServicesScreen> createState() => _ServicesScreenState();
+}
+
+class _ServicesScreenState extends State<ServicesScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  /// Eager init (not [late]) so [IndexedStack] offstage builds cannot hit an uninitialized controller.
+  final PageController _treatmentPageController = PageController();
+  /// Page 0 defaults to index 0 (All Procedures) so the combined catalog shows on load.
+  final List<int> _selectedPerPage = List<int>.filled(
+    _treatmentPages.length,
+    0,
+  );
+
+  int _treatmentPageIndex = 0;
+
+  static const _bgCream = Color(0xFFF9F4EF);
+  /// Total height of the hero image strip (design spec).
+  static const _bannerHeight = 216.0;
+  static const _bannerSearchBottomInset = 16.0;
+  static const _headingToSearchGap = 24.0;
+  /// Fixed height for bottom search bar layout (matches padding + one line).
+  static const _searchBarHeight = 46.0;
+  static const _titleBrown = Color(0xFF3D3530);
+  static const _indicatorActive = Color(0xFFC49A78);
+  static const _indicatorIdle = Color(0xFFE8DDD4);
+
+  /// Three carousel pages of treatments (3×2 grid each; last page may use one empty cell).
+  /// Several PNGs use a non-breaking space (U+00A0) before the extension on disk.
+  static const _treatmentPages = <List<_CategoryDef>>[
+    [
+      _CategoryDef(
+        label: 'All Procedures',
+        imageAsset: 'assets/Services/All Procedures.png',
+      ),
+      _CategoryDef(
+        label: 'Laser Hair Removal',
+        imageAsset: 'assets/Services/Laser Hair Removal\u00a0.png',
+      ),
+      _CategoryDef(
+        label: 'Exosomes + PDRN',
+        imageAsset: 'assets/Services/Exosomes + PDRN.svg',
+      ),
+      _CategoryDef(
+        label: 'Injectable Item',
+        imageAsset: 'assets/Services/Injectable Item\u00a0.png',
+      ),
+      _CategoryDef(
+        label: 'Clinical Facial',
+        imageAsset: 'assets/Services/Clinical Facial\u00a0.png',
+      ),
+      _CategoryDef(
+        label: 'Chemical Peeling',
+        imageAsset: 'assets/Services/Chemical Peeling\u00a0.png',
+      ),
+    ],
+    [
+      _CategoryDef(
+        label: 'PRP',
+        imageAsset: 'assets/Services/PRD.png',
+      ),
+      _CategoryDef(
+        label: 'CO2',
+        imageAsset: 'assets/Services/CO2\u00a0.png',
+      ),
+      _CategoryDef(
+        label: 'Botox',
+        imageAsset: 'assets/Services/Botox.png',
+      ),
+      _CategoryDef(
+        label: 'Filler Injectable',
+        imageAsset: 'assets/Services/Filler Injectable\u00a0.png',
+      ),
+      _CategoryDef(
+        label: 'Pico Laser',
+        imageAsset: 'assets/Services/Pico Laser\u00a0.png',
+      ),
+      _CategoryDef(
+        label: 'Fractional Laser',
+        imageAsset: 'assets/Services/Fractional Laser\u00a0.png',
+      ),
+    ],
+    [
+      _CategoryDef(
+        label: 'Xanthelasma',
+        imageAsset: 'assets/Services/Xanthelasma\u00a0.png',
+      ),
+      _CategoryDef(
+        label: 'Microdermabrasion',
+        imageAsset: 'assets/Services/Microdermabrasion\u00a0.png',
+      ),
+      _CategoryDef(
+        label: 'Exciplex',
+        imageAsset: 'assets/Services/Exciplex\u00a0.png',
+      ),
+      _CategoryDef(
+        label: 'Excision',
+        imageAsset: 'assets/Services/Excision\u00a0\u00a0.png',
+      ),
+      _CategoryDef(
+        label: 'Others',
+        imageAsset: 'assets/Services/Others\u00a0.png',
+      ),
+    ],
+  ];
+
+  static const _gridCrossAxisCount = 3;
+  static const _gridMainAxisSpacing = 14.0;
+  static const _gridCrossAxisSpacing = 14.0;
+  /// Fixed treatment tile height (design spec).
+  static const _treatmentCardHeight = 58.0;
+
+  static const _lhrThumbAsset =
+      'assets/Services/Laser Hair Removal\u00a0.png';
+
+  static const _exosomesPdrnThumbAsset =
+      'assets/Services/Exosomes + PDRN.svg';
+
+  static const _clinicalFacialThumbAsset =
+      'assets/Services/Clinical Facial\u00a0.png';
+
+  static const _injectableItemThumbAsset =
+      'assets/Services/Injectable Item\u00a0.png';
+
+  static const _chemicalPeelingThumbAsset =
+      'assets/Services/Chemical Peeling\u00a0.png';
+
+  static const _prpThumbAsset = 'assets/Services/PRD.png';
+  static const _co2ThumbAsset = 'assets/Services/CO2\u00a0.png';
+  static const _botoxThumbAsset = 'assets/Services/Botox.png';
+  static const _fillerInjectableThumbAsset =
+      'assets/Services/Filler Injectable\u00a0.png';
+  static const _picoLaserThumbAsset =
+      'assets/Services/Pico Laser\u00a0.png';
+  static const _fractionalLaserThumbAsset =
+      'assets/Services/Fractional Laser\u00a0.png';
+  static const _xanthelasmaThumbAsset =
+      'assets/Services/Xanthelasma\u00a0.png';
+  static const _microdermabrasionThumbAsset =
+      'assets/Services/Microdermabrasion\u00a0.png';
+  static const _exciplexThumbAsset = 'assets/Services/Exciplex\u00a0.png';
+  static const _excisionThumbAsset =
+      'assets/Services/Excision\u00a0\u00a0.png';
+  static const _othersThumbAsset = 'assets/Services/Others\u00a0.png';
+
+  /// Body-area rows for [Laser Hair Removal] (thumbnails use placeholder until per-area assets exist).
+  static const _laserHairRemovalSubItems = <String>[
+    'LHR abdomen',
+    'LHR bikini',
+    'LHR cheeks',
+    'LHR chin',
+    'LHR Both Full Arms',
+    'LHR full back',
+    'LHR full body & face',
+    'LHR full body excluding face',
+    'LHR full chest',
+    'LHR full face & neck',
+    'LHR full face',
+    'LHR Forearm',
+    'LHR under arms',
+    'LHR Half legs',
+    'LHR upper lip',
+    'LHR full legs',
+    'LHR neck (front back)',
+    'LHR Both Hands',
+    'LHR shoulders',
+    'LHR Both Feet',
+    'LHR Forehead',
+    'LHR Both Buttocks',
+    'LHR Sideburn',
+    'LHR Thighs',
+  ];
+
+  static const _exosomesPdrnSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'Exosome with PDRN with GFP for Hair with LED Light',
+      thumbAsset: _exosomesPdrnThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'T-Lab Exosomes + Hair PRP Treatment and LED light',
+      thumbAsset: _exosomesPdrnThumbAsset,
+    ),
+    _SubServiceItem(
+      title:
+          'Tlab Exosomes + PDRN for Face Mesotherapy Treatment and LED light',
+      thumbAsset: _exosomesPdrnThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Exosome with PDRN with GFP Face with LED Light',
+      thumbAsset: _exosomesPdrnThumbAsset,
+    ),
+  ];
+
+  static const _clinicalFacialSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'BTL Emfusion',
+      thumbAsset: _clinicalFacialThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Advance Hydrafacial & LED Therapy',
+      thumbAsset: _clinicalFacialThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Advance carbon facial with PicoStar',
+      thumbAsset: _clinicalFacialThumbAsset,
+    ),
+  ];
+
+  static const _injectableItemSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'Brightening IV Drip - Advance Swiss Glutathione',
+      thumbAsset: _injectableItemThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Lipolytic Injection For Abdomen (20ml)',
+      thumbAsset: _injectableItemThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Keloid scar treatment - injection',
+      thumbAsset: _injectableItemThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Mesotherapy with microneedling',
+      thumbAsset: _injectableItemThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'NAD +',
+      thumbAsset: _injectableItemThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Lipolytic Injection For Double Chin (10ml)',
+      thumbAsset: _injectableItemThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'PROFHILO Skin Booster (European)',
+      thumbAsset: _injectableItemThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Skin Booster (Korean)',
+      thumbAsset: _injectableItemThumbAsset,
+    ),
+  ];
+
+  static const _chemicalPeelingSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'Chemical Peeling Face',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Neck',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Full Leg',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peel Arms',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Feet',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Knee',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peel Bikini Area',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peel Under arms',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Half Legs',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Half Legs',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Buttock',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Face and Neck',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Full Back',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Hand',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Upper back',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Forearm',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Under Eye',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Elbow',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Chemical Peeling Lips',
+      thumbAsset: _chemicalPeelingThumbAsset,
+    ),
+  ];
+
+  static const _prpSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'PRP for Face with LED Light',
+      thumbAsset: _prpThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'PRP for Hair',
+      thumbAsset: _prpThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'PRP Under Eyes with Led Light',
+      thumbAsset: _prpThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'PRP body small area with Led Light',
+      thumbAsset: _prpThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'PRP for Face & Hair with Led Light',
+      thumbAsset: _prpThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'PRP Microneedling with LED light',
+      thumbAsset: _prpThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'PRP body large area with Led Light',
+      thumbAsset: _prpThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'PRF Under Eye with LED light',
+      thumbAsset: _prpThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'PRP for Face & Neck with Led Light',
+      thumbAsset: _prpThumbAsset,
+    ),
+  ];
+
+  static const _co2SubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'CO2 Laser Surgery for Skin Tag',
+      thumbAsset: _co2ThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'CO2 Laser Additional Added 1 PC',
+      thumbAsset: _co2ThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'CO2 Laser for single lesion',
+      thumbAsset: _co2ThumbAsset,
+    ),
+  ];
+
+  static const _botoxSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'Botox Korean (Upper/ Lower) 50 units',
+      thumbAsset: _botoxThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Botox European (upper/lower face) 50 unit',
+      thumbAsset: _botoxThumbAsset,
+    ),
+  ];
+
+  static const _fillerInjectableSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'European Filler per syringe',
+      thumbAsset: _fillerInjectableThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Korean Filler per syringe',
+      thumbAsset: _fillerInjectableThumbAsset,
+    ),
+  ];
+
+  static const _picoLaserSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'Pico Star Laser for Small Area',
+      thumbAsset: _picoLaserThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Pico Star Laser for Medium Area',
+      thumbAsset: _picoLaserThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Pico Star Laser for Large Area',
+      thumbAsset: _picoLaserThumbAsset,
+    ),
+  ];
+
+  static const _fractionalLaserSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'Fractional advance using Fotona (large)',
+      thumbAsset: _fractionalLaserThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Fractional advance using Fotona (medium)',
+      thumbAsset: _fractionalLaserThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Fractional advance using Fotona (small)',
+      thumbAsset: _fractionalLaserThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Fractional using co2 large area',
+      thumbAsset: _fractionalLaserThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Fractional using co2 medium area',
+      thumbAsset: _fractionalLaserThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Fractional using CO2 Laser small area',
+      thumbAsset: _fractionalLaserThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Under Eye Fractional Advance with Fotona',
+      thumbAsset: _fractionalLaserThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Lips Fractional advance with Fotona',
+      thumbAsset: _fractionalLaserThumbAsset,
+    ),
+  ];
+
+  static const _xanthelasmaSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'Excision for Single Eye Small Area',
+      thumbAsset: _xanthelasmaThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Excision for Single Eye Medium to Large Area',
+      thumbAsset: _xanthelasmaThumbAsset,
+    ),
+  ];
+
+  static const _microdermabrasionSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title:
+          'Microdermabrasion with Led Light Therapy for face & neck',
+      thumbAsset: _microdermabrasionThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Microdermabrasion Upper Back',
+      thumbAsset: _microdermabrasionThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Microdermabrasion Full Back',
+      thumbAsset: _microdermabrasionThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Microdermabrasion Full Arm',
+      thumbAsset: _microdermabrasionThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Microdermabrasion Full Leg',
+      thumbAsset: _microdermabrasionThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Microdermabrasion Half Leg',
+      thumbAsset: _microdermabrasionThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Microdermabrasion Forearm',
+      thumbAsset: _microdermabrasionThumbAsset,
+    ),
+  ];
+
+  static const _exciplexSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'Exciplex (large area)',
+      thumbAsset: _exciplexThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Exciplex (medium area)',
+      thumbAsset: _exciplexThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Exciplex (small area)',
+      thumbAsset: _exciplexThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Exciplex test',
+      thumbAsset: _exciplexThumbAsset,
+    ),
+  ];
+
+  static const _excisionSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'Excision',
+      thumbAsset: _excisionThumbAsset,
+    ),
+  ];
+
+  static const _othersSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'Single Nail Avulsion',
+      thumbAsset: _othersThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Face Analysing Test with Doctor consultation',
+      thumbAsset: _othersThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Advance Hair Growth Booster',
+      thumbAsset: _othersThumbAsset,
+    ),
+    _SubServiceItem(
+      title: 'Dermoscopy Test',
+      thumbAsset: _othersThumbAsset,
+    ),
+    _SubServiceItem(
+      title:
+          "Wood's Lamp examination with report and doctor consultation",
+      thumbAsset: _othersThumbAsset,
+    ),
+  ];
+
+  static const _subGridCrossAxisCount = 2;
+  static const _subGridMainAxisSpacing = 14.0;
+  static const _subGridCrossAxisSpacing = 14.0;
+  static const _subRowHeight = 58.0;
+
+  _CategoryDef? _visibleSelectedCategory() {
+    final pi = _treatmentPageIndex;
+    if (pi < 0 || pi >= _treatmentPages.length) return null;
+    final page = _treatmentPages[pi];
+    final si = _selectedPerPage[pi];
+    if (si < 0 || si >= page.length) return null;
+    return page[si];
+  }
+
+  double _twoColSubGridHeight(int itemCount) {
+    final rows = (itemCount / _subGridCrossAxisCount).ceil();
+    return rows * _subRowHeight +
+        (rows - 1) * _subGridMainAxisSpacing;
+  }
+
+  static final _subSectionTitleStyle = AppFonts.poppins(
+    color: _titleBrown,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    height: 1.2,
+  );
+
+  Widget _headingAndBody(String heading, Widget body) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const SizedBox(height: 28),
+        Text(heading, style: _subSectionTitleStyle),
+        const SizedBox(height: 16),
+        body,
+      ],
+    );
+  }
+
+  Widget _lhrGridSized() {
+    return SizedBox(
+      height: _twoColSubGridHeight(_laserHairRemovalSubItems.length),
+      child: GridView.builder(
+        padding: EdgeInsets.zero,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: _subGridCrossAxisCount,
+          mainAxisSpacing: _subGridMainAxisSpacing,
+          crossAxisSpacing: _subGridCrossAxisSpacing,
+          mainAxisExtent: _subRowHeight,
+        ),
+        itemCount: _laserHairRemovalSubItems.length,
+        itemBuilder: (context, i) {
+          return _TreatmentSubServiceRow(
+            title: _laserHairRemovalSubItems[i],
+            thumbAsset: _lhrThumbAsset,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _twoColItemsGrid(List<_SubServiceItem> items) {
+    return SizedBox(
+      height: _twoColSubGridHeight(items.length),
+      child: GridView.builder(
+        padding: EdgeInsets.zero,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: _subGridCrossAxisCount,
+          mainAxisSpacing: _subGridMainAxisSpacing,
+          crossAxisSpacing: _subGridCrossAxisSpacing,
+          mainAxisExtent: _subRowHeight,
+        ),
+        itemCount: items.length,
+        itemBuilder: (context, i) {
+          final item = items[i];
+          return _TreatmentSubServiceRow(
+            title: item.title,
+            thumbAsset: item.thumbAsset,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _othersGridColumn() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: _TreatmentSubServiceRow(
+                title: _othersSubItems[0].title,
+                thumbAsset: _othersSubItems[0].thumbAsset,
+              ),
+            ),
+            const SizedBox(width: _subGridCrossAxisSpacing),
+            Expanded(
+              child: _TreatmentSubServiceRow(
+                title: _othersSubItems[1].title,
+                thumbAsset: _othersSubItems[1].thumbAsset,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: _subGridMainAxisSpacing),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: _TreatmentSubServiceRow(
+                title: _othersSubItems[2].title,
+                thumbAsset: _othersSubItems[2].thumbAsset,
+              ),
+            ),
+            const SizedBox(width: _subGridCrossAxisSpacing),
+            Expanded(
+              child: _TreatmentSubServiceRow(
+                title: _othersSubItems[3].title,
+                thumbAsset: _othersSubItems[3].thumbAsset,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: _subGridMainAxisSpacing),
+        _TreatmentSubServiceRow(
+          title: _othersSubItems[4].title,
+          thumbAsset: _othersSubItems[4].thumbAsset,
+        ),
+      ],
+    );
+  }
+
+  Iterable<Widget> _allProceduresSubSections() sync* {
+    if (_visibleSelectedCategory()?.label != 'All Procedures') {
+      return;
+    }
+    yield _headingAndBody('Laser Hair Removal', _lhrGridSized());
+    yield _headingAndBody(
+      'Exosomes + PDRN',
+      _twoColItemsGrid(_exosomesPdrnSubItems),
+    );
+    yield _headingAndBody(
+      'Injectable Item',
+      _twoColItemsGrid(_injectableItemSubItems),
+    );
+    yield _headingAndBody(
+      'Clinical Facial',
+      _twoColItemsGrid(_clinicalFacialSubItems),
+    );
+    yield _headingAndBody(
+      'Chemical Peeling',
+      _twoColItemsGrid(_chemicalPeelingSubItems),
+    );
+    yield _headingAndBody('PRP', _twoColItemsGrid(_prpSubItems));
+    yield _headingAndBody('CO2', _twoColItemsGrid(_co2SubItems));
+    yield _headingAndBody(
+      'Botulinum toxin Injectable',
+      _twoColItemsGrid(_botoxSubItems),
+    );
+    yield _headingAndBody(
+      'Filler Injectable',
+      _twoColItemsGrid(_fillerInjectableSubItems),
+    );
+    yield _headingAndBody(
+      'Pico Laser',
+      _twoColItemsGrid(_picoLaserSubItems),
+    );
+    yield _headingAndBody(
+      'Fractional Laser',
+      _twoColItemsGrid(_fractionalLaserSubItems),
+    );
+    yield _headingAndBody(
+      'Xanthelasma',
+      _twoColItemsGrid(_xanthelasmaSubItems),
+    );
+    yield _headingAndBody(
+      'Microdermabrasion',
+      _twoColItemsGrid(_microdermabrasionSubItems),
+    );
+    yield _headingAndBody(
+      'Exciplex',
+      _twoColItemsGrid(_exciplexSubItems),
+    );
+    yield _headingAndBody(
+      'Excision',
+      _twoColItemsGrid(_excisionSubItems),
+    );
+    yield _headingAndBody('Others', _othersGridColumn());
+  }
+
+  Iterable<Widget> _lhrSubSection() sync* {
+    if (_visibleSelectedCategory()?.label != 'Laser Hair Removal') {
+      return;
+    }
+    yield _headingAndBody('Laser Hair Removal', _lhrGridSized());
+  }
+
+  Iterable<Widget> _twoColItemsSubSection(
+    String categoryLabel,
+    String heading,
+    List<_SubServiceItem> items,
+  ) sync* {
+    if (_visibleSelectedCategory()?.label != categoryLabel) {
+      return;
+    }
+    yield _headingAndBody(heading, _twoColItemsGrid(items));
+  }
+
+  Iterable<Widget> _othersSubSection() sync* {
+    if (_visibleSelectedCategory()?.label != 'Others') {
+      return;
+    }
+    yield _headingAndBody('Others', _othersGridColumn());
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _treatmentPageController.dispose();
+    super.dispose();
+  }
+
+  double _treatmentGridHeight(int itemCount) {
+    final rows = (itemCount / _gridCrossAxisCount).ceil();
+    return rows * _treatmentCardHeight + (rows - 1) * _gridMainAxisSpacing;
+  }
+
+  Future<void> _goToTreatmentPage(int index) async {
+    await _treatmentPageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 320),
+      curve: Curves.easeInOutCubic,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final maxTreatmentItems = _treatmentPages.fold<int>(
+      0,
+      (m, p) => m > p.length ? m : p.length,
+    );
+    final treatmentGridHeight = _treatmentGridHeight(maxTreatmentItems);
+
+    return ColoredBox(
+      color: _bgCream,
+      child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            SizedBox(
+              height: _bannerHeight,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    'assets/images/services.png',
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  ),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.38),
+                    ),
+                  ),
+                  Positioned(
+                    left: 20,
+                    right: 20,
+                    bottom: _bannerSearchBottomInset +
+                        _searchBarHeight +
+                        _headingToSearchGap,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'SKINN',
+                          style: AppFonts.silkSerif(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 4,
+                            height: 1.0,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Treatments',
+                          style: AppFonts.silkSerif(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            height: 1.1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    left: 20,
+                    right: 20,
+                    bottom: _bannerSearchBottomInset,
+                    child: SizedBox(
+                      height: _searchBarHeight,
+                      child: _SearchField(
+                        controller: _searchController,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 28, 20, 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Treatments',
+                    style: AppFonts.silkSerif(
+                      color: _titleBrown,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      height: 1.2,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    height: treatmentGridHeight,
+                    child: PageView.builder(
+                      controller: _treatmentPageController,
+                      itemCount: _treatmentPages.length,
+                      onPageChanged: (i) {
+                        setState(() => _treatmentPageIndex = i);
+                      },
+                      itemBuilder: (context, pageIndex) {
+                        final page = _treatmentPages[pageIndex];
+                        final slotCount = ((page.length +
+                                    _gridCrossAxisCount -
+                                    1) ~/
+                                _gridCrossAxisCount) *
+                            _gridCrossAxisCount;
+                        return GridView.builder(
+                          padding: EdgeInsets.zero,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: _gridCrossAxisCount,
+                            mainAxisSpacing: _gridMainAxisSpacing,
+                            crossAxisSpacing: _gridCrossAxisSpacing,
+                            mainAxisExtent: _treatmentCardHeight,
+                          ),
+                          itemCount: slotCount,
+                          itemBuilder: (context, index) {
+                            if (index >= page.length) {
+                              return const IgnorePointer(
+                                child: SizedBox.expand(),
+                              );
+                            }
+                            final def = page[index];
+                            final selected =
+                                index == _selectedPerPage[pageIndex];
+                            return _TreatmentCard(
+                              label: def.label,
+                              selected: selected,
+                              onTap: () => setState(
+                                () => _selectedPerPage[pageIndex] = index,
+                              ),
+                              child: def.imageAsset != null
+                                  ? Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 4,
+                                      ),
+                                      child: def.imageAsset!.endsWith('.svg')
+                                          ? SvgPicture.asset(
+                                              def.imageAsset!,
+                                              fit: BoxFit.contain,
+                                              alignment: Alignment.center,
+                                            )
+                                          : Image.asset(
+                                              def.imageAsset!,
+                                              fit: BoxFit.contain,
+                                              alignment: Alignment.center,
+                                            ),
+                                    )
+                                  : Icon(
+                                      def.icon,
+                                      size: 40,
+                                      color: def.iconColor(selected),
+                                    ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  Center(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: List.generate(
+                        _treatmentPages.length,
+                        (i) {
+                          final active = i == _treatmentPageIndex;
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              left: i == 0 ? 0 : 8,
+                            ),
+                            child: GestureDetector(
+                              onTap: () => _goToTreatmentPage(i),
+                              behavior: HitTestBehavior.opaque,
+                              child: AnimatedContainer(
+                                duration: const Duration(
+                                  milliseconds: 220,
+                                ),
+                                curve: Curves.easeOutCubic,
+                                width: active ? 28 : 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: active
+                                      ? _indicatorActive
+                                      : _indicatorIdle,
+                                  borderRadius: BorderRadius.circular(999),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  ..._allProceduresSubSections(),
+                  ..._lhrSubSection(),
+                  ..._twoColItemsSubSection(
+                    'Exosomes + PDRN',
+                    'Exosomes + PDRN',
+                    _exosomesPdrnSubItems,
+                  ),
+                  ..._twoColItemsSubSection(
+                    'Clinical Facial',
+                    'Clinical Facial',
+                    _clinicalFacialSubItems,
+                  ),
+                  ..._twoColItemsSubSection(
+                    'Injectable Item',
+                    'Injectable Item',
+                    _injectableItemSubItems,
+                  ),
+                  ..._twoColItemsSubSection(
+                    'Chemical Peeling',
+                    'Chemical Peeling',
+                    _chemicalPeelingSubItems,
+                  ),
+                  ..._twoColItemsSubSection('PRP', 'PRP', _prpSubItems),
+                  ..._twoColItemsSubSection('CO2', 'CO2', _co2SubItems),
+                  ..._twoColItemsSubSection(
+                    'Botox',
+                    'Botulinum toxin Injectable',
+                    _botoxSubItems,
+                  ),
+                  ..._twoColItemsSubSection(
+                    'Filler Injectable',
+                    'Filler Injectable',
+                    _fillerInjectableSubItems,
+                  ),
+                  ..._twoColItemsSubSection(
+                    'Pico Laser',
+                    'Pico Laser',
+                    _picoLaserSubItems,
+                  ),
+                  ..._twoColItemsSubSection(
+                    'Fractional Laser',
+                    'Fractional Laser',
+                    _fractionalLaserSubItems,
+                  ),
+                  ..._twoColItemsSubSection(
+                    'Xanthelasma',
+                    'Xanthelasma',
+                    _xanthelasmaSubItems,
+                  ),
+                  ..._twoColItemsSubSection(
+                    'Microdermabrasion',
+                    'Microdermabrasion',
+                    _microdermabrasionSubItems,
+                  ),
+                  ..._twoColItemsSubSection(
+                    'Exciplex',
+                    'Exciplex',
+                    _exciplexSubItems,
+                  ),
+                  ..._twoColItemsSubSection(
+                    'Excision',
+                    'Excision',
+                    _excisionSubItems,
+                  ),
+                  ..._othersSubSection(),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _CategoryDef {
+  const _CategoryDef({
+    required this.label,
+    this.icon,
+    this.imageAsset,
+  }) : assert(icon != null || imageAsset != null);
+
+  final String label;
+  final IconData? icon;
+  final String? imageAsset;
+
+  Color iconColor(bool selected) =>
+      selected ? const Color(0xFF4A3F38) : const Color(0xFF6B6560);
+}
+
+class _SearchField extends StatelessWidget {
+  const _SearchField({required this.controller});
+
+  final TextEditingController controller;
+
+  static const _hintGray = Color(0xFFB0A8A4);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(999),
+      elevation: 0,
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(20, 0, 16, 0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: TextField(
+                controller: controller,
+                cursorColor: const Color(0xFF4A3F38),
+                maxLines: 1,
+                textAlignVertical: TextAlignVertical.center,
+                style: AppFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: const Color(0xFF4A3F38),
+                  height: 1.25,
+                ),
+                decoration: InputDecoration(
+                  isDense: true,
+                  hintText: 'Search treatment',
+                  hintStyle: AppFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: _hintGray,
+                    height: 1.25,
+                  ),
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.zero,
+                  filled: false,
+                ),
+              ),
+            ),
+            SvgPicture.asset(
+              'assets/Icons/search-icon.svg',
+              width: 18,
+              height: 18,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Horizontal sub-service row: rounded thumb + procedure title (up to 3 lines).
+class _TreatmentSubServiceRow extends StatelessWidget {
+  const _TreatmentSubServiceRow({
+    required this.title,
+    required this.thumbAsset,
+  });
+
+  final String title;
+  final String thumbAsset;
+
+  static const _borderColor = Color(0xFFEEE0D6);
+  static const _titleColor = Color(0xFF605851);
+  static const _cardRadius = 8.0;
+  static const _cardPadding = 8.0;
+  static const _thumbGap = 4.0;
+  static const _thumbRadius = 6.0;
+  static const _thumbSize = 42.0;
+  static const _procedureTitleMaxLines = 3;
+
+  @override
+  Widget build(BuildContext context) {
+    final thumb = thumbAsset.endsWith('.svg')
+        ? SvgPicture.asset(
+            thumbAsset,
+            width: _thumbSize,
+            height: _thumbSize,
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
+          )
+        : Image.asset(
+            thumbAsset,
+            width: _thumbSize,
+            height: _thumbSize,
+            fit: BoxFit.cover,
+            alignment: Alignment.center,
+          );
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(_cardRadius),
+        border: Border.all(color: _borderColor, width: 1),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(_cardPadding),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(_thumbRadius),
+              child: SizedBox(
+                width: _thumbSize,
+                height: _thumbSize,
+                child: thumb,
+              ),
+            ),
+            const SizedBox(width: _thumbGap),
+            Expanded(
+              child: Text(
+                title,
+                maxLines: _procedureTitleMaxLines,
+                softWrap: true,
+                overflow: TextOverflow.clip,
+                textAlign: TextAlign.start,
+                style: AppFonts.poppins(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w400,
+                  color: _titleColor,
+                  height: 1.25,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TreatmentCard extends StatelessWidget {
+  const _TreatmentCard({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+    required this.child,
+  });
+
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+  final Widget child;
+
+  static const _activeFill = Color(0xFFEEE0D6);
+  static const _idleFill = Color(0xFFFFFFFF);
+  static const _borderColor = Color(0xFFEEE0D6);
+  static const _titleColor = Color(0xFF605851);
+  static const _cardRadius = 8.0;
+  static const _cardPadding = 8.0;
+  static const _iconTitleGap = 4.0;
+  static const _labelMaxLines = 3;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(_cardRadius),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: selected ? _activeFill : _idleFill,
+            borderRadius: BorderRadius.circular(_cardRadius),
+            border: selected
+                ? null
+                : Border.all(
+                    color: _borderColor,
+                    width: 1,
+                  ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(_cardPadding),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  flex: 2,
+                  child: Center(child: child),
+                ),
+                const SizedBox(height: _iconTitleGap),
+                Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  maxLines: _labelMaxLines,
+                  softWrap: true,
+                  overflow: TextOverflow.clip,
+                  style: AppFonts.poppins(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                    color: _titleColor,
+                    height: 1.25,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
