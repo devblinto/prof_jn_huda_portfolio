@@ -629,6 +629,27 @@ class _ServicesScreenState extends State<ServicesScreen> {
     ),
   ];
 
+  /// Same groupings as [All Procedures] — used for global treatment search.
+  static const _treatmentSearchCatalog =
+      <({String section, List<_SubServiceItem> items})>[
+        (section: 'Laser Hair Removal', items: _laserHairRemovalSubItems),
+        (section: 'Exosomes + PDRN', items: _exosomesPdrnSubItems),
+        (section: 'Injectable Item', items: _injectableItemSubItems),
+        (section: 'Clinical Facial', items: _clinicalFacialSubItems),
+        (section: 'Chemical Peeling', items: _chemicalPeelingSubItems),
+        (section: 'PRP', items: _prpSubItems),
+        (section: 'CO2', items: _co2SubItems),
+        (section: 'Botulinum toxin Injectable', items: _botoxSubItems),
+        (section: 'Filler Injectable', items: _fillerInjectableSubItems),
+        (section: 'Pico Laser', items: _picoLaserSubItems),
+        (section: 'Fractional Laser', items: _fractionalLaserSubItems),
+        (section: 'Xanthelasma', items: _xanthelasmaSubItems),
+        (section: 'Microdermabrasion', items: _microdermabrasionSubItems),
+        (section: 'Exciplex', items: _exciplexSubItems),
+        (section: 'Excision', items: _excisionSubItems),
+        (section: 'Others', items: _othersSubItems),
+      ];
+
   static const _subGridCrossAxisCount = 2;
   static const _subGridMainAxisSpacing = 14.0;
   static const _subGridCrossAxisSpacing = 14.0;
@@ -836,8 +857,62 @@ class _ServicesScreenState extends State<ServicesScreen> {
     yield _headingAndBody('Others', _othersGridColumn());
   }
 
+  String get _searchQueryNorm => _searchController.text.trim().toLowerCase();
+
+  bool get _isTreatmentSearchActive => _searchQueryNorm.isNotEmpty;
+
+  Iterable<Widget> _searchResultSections() sync* {
+    final q = _searchQueryNorm;
+    if (q.isEmpty) {
+      return;
+    }
+    var any = false;
+    for (final entry in _treatmentSearchCatalog) {
+      final sectionL = entry.section.toLowerCase();
+      final filtered = entry.items
+          .where(
+            (e) =>
+                e.title.toLowerCase().contains(q) || sectionL.contains(q),
+          )
+          .toList();
+      if (filtered.isEmpty) {
+        continue;
+      }
+      any = true;
+      yield _headingAndBody(entry.section, _twoColItemsGrid(filtered));
+    }
+    if (!any) {
+      yield Padding(
+        padding: const EdgeInsets.only(top: 28),
+        child: Center(
+          child: Text(
+            'No treatments found',
+            textAlign: TextAlign.center,
+            style: AppFonts.poppins(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: const Color(0xFF8A827C),
+              height: 1.3,
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  void _onSearchTextChanged() {
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController.addListener(_onSearchTextChanged);
+  }
+
   @override
   void dispose() {
+    _searchController.removeListener(_onSearchTextChanged);
     _searchController.dispose();
     _treatmentPageController.dispose();
     super.dispose();
@@ -1051,72 +1126,75 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       }),
                     ),
                   ),
-                  ..._allProceduresSubSections(),
-                  ..._lhrSubSection(),
-                  ..._twoColItemsSubSection(
-                    'Exosomes + PDRN',
-                    'Exosomes + PDRN',
-                    _exosomesPdrnSubItems,
-                  ),
-                  ..._twoColItemsSubSection(
-                    'Clinical Facial',
-                    'Clinical Facial',
-                    _clinicalFacialSubItems,
-                  ),
-                  ..._twoColItemsSubSection(
-                    'Injectable Item',
-                    'Injectable Item',
-                    _injectableItemSubItems,
-                  ),
-                  ..._twoColItemsSubSection(
-                    'Chemical Peeling',
-                    'Chemical Peeling',
-                    _chemicalPeelingSubItems,
-                  ),
-                  ..._twoColItemsSubSection('PRP', 'PRP', _prpSubItems),
-                  ..._twoColItemsSubSection('CO2', 'CO2', _co2SubItems),
-                  ..._twoColItemsSubSection(
-                    'Botox',
-                    'Botulinum toxin Injectable',
-                    _botoxSubItems,
-                  ),
-                  ..._twoColItemsSubSection(
-                    'Filler Injectable',
-                    'Filler Injectable',
-                    _fillerInjectableSubItems,
-                  ),
-                  ..._twoColItemsSubSection(
-                    'Pico Laser',
-                    'Pico Laser',
-                    _picoLaserSubItems,
-                  ),
-                  ..._twoColItemsSubSection(
-                    'Fractional Laser',
-                    'Fractional Laser',
-                    _fractionalLaserSubItems,
-                  ),
-                  ..._twoColItemsSubSection(
-                    'Xanthelasma',
-                    'Xanthelasma',
-                    _xanthelasmaSubItems,
-                  ),
-                  ..._twoColItemsSubSection(
-                    'Microdermabrasion',
-                    'Microdermabrasion',
-                    _microdermabrasionSubItems,
-                  ),
-                  ..._twoColItemsSubSection(
-                    'Exciplex',
-                    'Exciplex',
-                    _exciplexSubItems,
-                  ),
-                  ..._twoColItemsSubSection(
-                    'Excision',
-                    'Excision',
-                    _excisionSubItems,
-                  ),
-                  ..._othersSubSection(),
-                  if (_visibleSelectedCategory() != null)
+                  if (_isTreatmentSearchActive) ..._searchResultSections() else ...[
+                    ..._allProceduresSubSections(),
+                    ..._lhrSubSection(),
+                    ..._twoColItemsSubSection(
+                      'Exosomes + PDRN',
+                      'Exosomes + PDRN',
+                      _exosomesPdrnSubItems,
+                    ),
+                    ..._twoColItemsSubSection(
+                      'Clinical Facial',
+                      'Clinical Facial',
+                      _clinicalFacialSubItems,
+                    ),
+                    ..._twoColItemsSubSection(
+                      'Injectable Item',
+                      'Injectable Item',
+                      _injectableItemSubItems,
+                    ),
+                    ..._twoColItemsSubSection(
+                      'Chemical Peeling',
+                      'Chemical Peeling',
+                      _chemicalPeelingSubItems,
+                    ),
+                    ..._twoColItemsSubSection('PRP', 'PRP', _prpSubItems),
+                    ..._twoColItemsSubSection('CO2', 'CO2', _co2SubItems),
+                    ..._twoColItemsSubSection(
+                      'Botox',
+                      'Botulinum toxin Injectable',
+                      _botoxSubItems,
+                    ),
+                    ..._twoColItemsSubSection(
+                      'Filler Injectable',
+                      'Filler Injectable',
+                      _fillerInjectableSubItems,
+                    ),
+                    ..._twoColItemsSubSection(
+                      'Pico Laser',
+                      'Pico Laser',
+                      _picoLaserSubItems,
+                    ),
+                    ..._twoColItemsSubSection(
+                      'Fractional Laser',
+                      'Fractional Laser',
+                      _fractionalLaserSubItems,
+                    ),
+                    ..._twoColItemsSubSection(
+                      'Xanthelasma',
+                      'Xanthelasma',
+                      _xanthelasmaSubItems,
+                    ),
+                    ..._twoColItemsSubSection(
+                      'Microdermabrasion',
+                      'Microdermabrasion',
+                      _microdermabrasionSubItems,
+                    ),
+                    ..._twoColItemsSubSection(
+                      'Exciplex',
+                      'Exciplex',
+                      _exciplexSubItems,
+                    ),
+                    ..._twoColItemsSubSection(
+                      'Excision',
+                      'Excision',
+                      _excisionSubItems,
+                    ),
+                    ..._othersSubSection(),
+                  ],
+                  if (_visibleSelectedCategory() != null &&
+                      !_isTreatmentSearchActive)
                     Padding(
                       padding: const EdgeInsets.only(top: 24),
                       child: LatestOfferSection(
@@ -1195,8 +1273,8 @@ class _SearchField extends StatelessWidget {
             ),
             SvgPicture.asset(
               'assets/Icons/search-icon.svg',
-              width: 18,
-              height: 18,
+              width: 35,
+              height: 35,
             ),
           ],
         ),

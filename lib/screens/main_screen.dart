@@ -51,7 +51,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final overlayStyle = (_currentIndex == 0 || _currentIndex == 1)
+    final overlayStyle = (_currentIndex == 0 ||
+            _currentIndex == 1 ||
+            _currentIndex == 2)
         ? _homeStatusOverlay
         : _lightScreenStatusOverlay;
 

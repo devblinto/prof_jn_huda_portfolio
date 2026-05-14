@@ -8,22 +8,31 @@ class ClinicsScreen extends StatelessWidget {
   const ClinicsScreen({super.key});
 
   static const _pageBg = Color(0xFFFDF8F5);
+  /// Matches [HomeScreen] hero shell; bottom radius aligns banner with other tabs.
+  static const _heroShell = Color(0xFFF3EBE4);
+  static const _heroRadius = 8.0;
+  /// Same image strip height as [ServicesScreen] hero.
+  static const _bannerHeight = 216.0;
   static const _labelBrown = Color(0xFF605851);
-  static const _bodyBrown = Color(0xFF7A7169);
+  static const _cardSubtitleBrown = Color(0xFF7E736B);
   static const _divider = Color(0xFFEEE0D6);
   static const _directionBtnBg = Color(0xFFE6D2C1);
   static const _bookBtnBg = Color(0xFF605851);
 
-  static final _labelStyle = AppFonts.poppins(
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
+  static const _iconAddress = 'assets/Icons/loca.png';
+  static const _iconPhone = 'assets/Icons/phn.png';
+  static const _iconVisiting = 'assets/Icons/time.png';
+
+  static final _cardSectionTitleStyle = AppFonts.poppins(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
     color: _labelBrown,
     height: 1.25,
   );
-  static final _bodyStyle = AppFonts.poppins(
+  static final _cardSectionBodyStyle = AppFonts.poppins(
     fontSize: 14,
     fontWeight: FontWeight.w400,
-    color: _bodyBrown,
+    color: _cardSubtitleBrown,
     height: 1.35,
   );
 
@@ -59,9 +68,13 @@ class ClinicsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: _pageBg,
-      body: SafeArea(
+    return ColoredBox(
+      color: _pageBg,
+      child: SafeArea(
+        top: false,
+        bottom: true,
+        left: false,
+        right: false,
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(0, 0, 0, 24),
           child: Column(
@@ -104,8 +117,6 @@ class ClinicsScreen extends StatelessWidget {
                       if (i > 0) const SizedBox(height: 16),
                       _ClinicCard(
                         clinic: _clinics[i],
-                        labelStyle: _labelStyle,
-                        bodyStyle: _bodyStyle,
                         onDirections: () => _launchExternal(
                           context,
                           Uri.parse(
@@ -162,16 +173,72 @@ class _HeroWithMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final topInset = MediaQuery.paddingOf(context).top;
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        SizedBox(
-          height: 210,
-          width: double.infinity,
-          child: Image.asset(
-            'assets/images/contact.webp',
-            fit: BoxFit.cover,
-            alignment: Alignment.center,
+        DecoratedBox(
+          decoration: const BoxDecoration(
+            color: ClinicsScreen._heroShell,
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(ClinicsScreen._heroRadius),
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.vertical(
+              bottom: Radius.circular(ClinicsScreen._heroRadius),
+            ),
+            child: SizedBox(
+              height: ClinicsScreen._bannerHeight,
+              width: double.infinity,
+              child: Stack(
+                clipBehavior: Clip.none,
+                fit: StackFit.expand,
+                children: [
+                  Image.asset(
+                    'assets/images/Clinics.png',
+                    fit: BoxFit.cover,
+                    alignment: Alignment.center,
+                  ),
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.38),
+                    ),
+                  ),
+                  Positioned(
+                    left: 20,
+                    right: 20,
+                    top: topInset + 20,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'SKINN',
+                          style: AppFonts.silkSerif(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 4,
+                            height: 1.0,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Clinics',
+                          style: AppFonts.silkSerif(
+                            color: Colors.white,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                            height: 1.1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ),
         Positioned(
@@ -277,15 +344,11 @@ class _ActionPill extends StatelessWidget {
 class _ClinicCard extends StatelessWidget {
   const _ClinicCard({
     required this.clinic,
-    required this.labelStyle,
-    required this.bodyStyle,
     required this.onDirections,
     required this.onDial,
   });
 
   final _ClinicBranch clinic;
-  final TextStyle labelStyle;
-  final TextStyle bodyStyle;
   final VoidCallback onDirections;
   final void Function(int phoneIndex) onDial;
 
@@ -302,7 +365,7 @@ class _ClinicCard extends StatelessWidget {
         child: Column(
           children: [
             _InfoBlock(
-              icon: Icons.location_on_outlined,
+              iconAsset: ClinicsScreen._iconAddress,
               label: 'Address',
               bodyWidget: Material(
                 color: Colors.transparent,
@@ -311,19 +374,20 @@ class _ClinicCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(6),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 2),
-                    child: Text(clinic.address, style: bodyStyle),
+                    child: Text(
+                      clinic.address,
+                      style: ClinicsScreen._cardSectionBodyStyle,
+                    ),
                   ),
                 ),
               ),
-              labelStyle: labelStyle,
-              bodyStyle: bodyStyle,
             ),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 12),
               child: Divider(height: 1, color: ClinicsScreen._divider),
             ),
             _InfoBlock(
-              icon: Icons.phone_outlined,
+              iconAsset: ClinicsScreen._iconPhone,
               label: 'Phone',
               bodyWidget: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,26 +401,25 @@ class _ClinicCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 2),
-                          child: Text(clinic.phones[i], style: bodyStyle),
+                          child: Text(
+                            clinic.phones[i],
+                            style: ClinicsScreen._cardSectionBodyStyle,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ],
               ),
-              labelStyle: labelStyle,
-              bodyStyle: bodyStyle,
             ),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 12),
               child: Divider(height: 1, color: ClinicsScreen._divider),
             ),
             _InfoBlock(
-              icon: Icons.schedule_outlined,
+              iconAsset: ClinicsScreen._iconVisiting,
               label: 'Visiting Day',
               body: clinic.visiting,
-              labelStyle: labelStyle,
-              bodyStyle: bodyStyle,
             ),
           ],
         ),
@@ -367,38 +430,47 @@ class _ClinicCard extends StatelessWidget {
 
 class _InfoBlock extends StatelessWidget {
   const _InfoBlock({
-    required this.icon,
+    required this.iconAsset,
     required this.label,
     this.body,
     this.bodyWidget,
-    required this.labelStyle,
-    required this.bodyStyle,
   }) : assert(body != null || bodyWidget != null);
 
-  final IconData icon;
+  final String iconAsset;
   final String label;
   final String? body;
   final Widget? bodyWidget;
-  final TextStyle labelStyle;
-  final TextStyle bodyStyle;
+
+  static const _iconSize = 22.0;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 22, color: ClinicsScreen._labelBrown),
+        SizedBox(
+          width: _iconSize,
+          height: _iconSize,
+          child: Image.asset(
+            iconAsset,
+            width: _iconSize,
+            height: _iconSize,
+            fit: BoxFit.contain,
+            color: ClinicsScreen._labelBrown,
+            colorBlendMode: BlendMode.srcIn,
+          ),
+        ),
         const SizedBox(width: 12),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(label, style: labelStyle),
+              Text(label, style: ClinicsScreen._cardSectionTitleStyle),
               const SizedBox(height: 6),
               if (bodyWidget != null)
                 bodyWidget!
               else
-                Text(body!, style: bodyStyle),
+                Text(body!, style: ClinicsScreen._cardSectionBodyStyle),
             ],
           ),
         ),
