@@ -132,21 +132,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
   /// Category switch icons in the Treatments grid (matches design: 31×31).
   static const _treatmentCategoryIconSize = 31.0;
 
-  static const _prpThumbAsset = 'assets/Services/PRD.png';
-  static const _co2ThumbAsset = 'assets/Services/CO2\u00a0.png';
-  static const _botoxThumbAsset = 'assets/Services/Botox.png';
-  static const _fillerInjectableThumbAsset =
-      'assets/Services/Filler Injectable\u00a0.png';
-  static const _picoLaserThumbAsset = 'assets/Services/Pico Laser\u00a0.png';
-  static const _fractionalLaserThumbAsset =
-      'assets/Services/Fractional Laser\u00a0.png';
-  static const _xanthelasmaThumbAsset = 'assets/Services/Xanthelasma\u00a0.png';
-  static const _microdermabrasionThumbAsset =
-      'assets/Services/Microdermabrasion\u00a0.png';
-  static const _exciplexThumbAsset = 'assets/Services/Exciplex\u00a0.png';
-  static const _excisionThumbAsset = 'assets/Services/Excision\u00a0\u00a0.png';
-  static const _othersThumbAsset = 'assets/Services/Others\u00a0.png';
-
   /// Body-area rows for [Laser Hair Removal] (thumbnails from [assets/Hair Removal/] where available).
   static const _laserHairRemovalSubItems = <_SubServiceItem>[
     _SubServiceItem(
@@ -410,205 +395,236 @@ class _ServicesScreenState extends State<ServicesScreen> {
   static const _prpSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'PRP for Face with LED Light',
-      thumbAsset: _prpThumbAsset,
+      thumbAsset: 'assets/PRP/PRP for Face with LED Light.png',
     ),
-    _SubServiceItem(title: 'PRP for Hair', thumbAsset: _prpThumbAsset),
+    _SubServiceItem(
+      title: 'PRP for Hair',
+      thumbAsset: 'assets/PRP/PRP for Hair.png',
+    ),
     _SubServiceItem(
       title: 'PRP Under Eyes with Led Light',
-      thumbAsset: _prpThumbAsset,
+      thumbAsset: 'assets/PRP/PRP Under Eyes with Led Light.png',
     ),
     _SubServiceItem(
       title: 'PRP body small area with Led Light',
-      thumbAsset: _prpThumbAsset,
+      thumbAsset: 'assets/PRP/PRP body small area with Led Light.png',
     ),
     _SubServiceItem(
       title: 'PRP for Face & Hair with Led Light',
-      thumbAsset: _prpThumbAsset,
+      thumbAsset: 'assets/PRP/PRP for Face & Hair with Led Light.png',
     ),
     _SubServiceItem(
       title: 'PRP Microneedling with LED light',
-      thumbAsset: _prpThumbAsset,
+      thumbAsset: 'assets/PRP/PRP Microneedling with LED light.png',
     ),
     _SubServiceItem(
       title: 'PRP body large area with Led Light',
-      thumbAsset: _prpThumbAsset,
+      thumbAsset: 'assets/PRP/PRP body large area with Led Light.png',
     ),
     _SubServiceItem(
       title: 'PRF Under Eye with LED light',
-      thumbAsset: _prpThumbAsset,
+      thumbAsset: 'assets/PRP/PRF Under Eye with LED light.png',
     ),
     _SubServiceItem(
       title: 'PRP for Face & Neck with Led Light',
-      thumbAsset: _prpThumbAsset,
+      thumbAsset: 'assets/PRP/PRP for Face & Neck with Led Light.png',
     ),
   ];
 
   static const _co2SubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'CO2 Laser Surgery for Skin Tag',
-      thumbAsset: _co2ThumbAsset,
+      thumbAsset: 'assets/CO2/CO2 Laser Surgery for Skin Tag.png',
     ),
     _SubServiceItem(
       title: 'CO2 Laser Additional Added 1 PC',
-      thumbAsset: _co2ThumbAsset,
+      thumbAsset: 'assets/CO2/CO2 Laser Additional Added 1 PC.png',
     ),
     _SubServiceItem(
       title: 'CO2 Laser for single lesion',
-      thumbAsset: _co2ThumbAsset,
+      thumbAsset: 'assets/CO2/CO2 Laser for single lesion.png',
     ),
   ];
 
   static const _botoxSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'Botox Korean (Upper/ Lower) 50 units',
-      thumbAsset: _botoxThumbAsset,
+      thumbAsset: 'assets/Botox/Botox Korean.png',
     ),
     _SubServiceItem(
       title: 'Botox European (upper/lower face) 50 unit',
-      thumbAsset: _botoxThumbAsset,
+      thumbAsset: 'assets/Botox/Botox European.png',
     ),
   ];
 
   static const _fillerInjectableSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'European Filler per syringe',
-      thumbAsset: _fillerInjectableThumbAsset,
+      thumbAsset: 'assets/Filler/European Filler per syringe.png',
     ),
     _SubServiceItem(
       title: 'Korean Filler per syringe',
-      thumbAsset: _fillerInjectableThumbAsset,
+      thumbAsset: 'assets/Filler/Korean Filler per syringe.png',
     ),
   ];
 
   static const _picoLaserSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'Pico Star Laser for Small Area',
-      thumbAsset: _picoLaserThumbAsset,
+      thumbAsset: 'assets/Pico Laser/Pico Star Laser for Small Area.png',
     ),
     _SubServiceItem(
       title: 'Pico Star Laser for Medium Area',
-      thumbAsset: _picoLaserThumbAsset,
+      thumbAsset: 'assets/Pico Laser/Pico Star Laser for Medium Area.png',
     ),
     _SubServiceItem(
       title: 'Pico Star Laser for Large Area',
-      thumbAsset: _picoLaserThumbAsset,
+      thumbAsset: 'assets/Pico Laser/Pico Star Laser for Large Area.png',
     ),
   ];
 
   static const _fractionalLaserSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'Fractional advance using Fotona (large)',
-      thumbAsset: _fractionalLaserThumbAsset,
+      thumbAsset:
+          'assets/Fractional Laser/Fractional advance using Fotona (large).png',
     ),
     _SubServiceItem(
       title: 'Fractional advance using Fotona (medium)',
-      thumbAsset: _fractionalLaserThumbAsset,
+      thumbAsset:
+          'assets/Fractional Laser/Fractional advance using Fotona (medium).png',
     ),
     _SubServiceItem(
       title: 'Fractional advance using Fotona (small)',
-      thumbAsset: _fractionalLaserThumbAsset,
+      thumbAsset:
+          'assets/Fractional Laser/Fractional advance using Fotona (small).png',
     ),
     _SubServiceItem(
       title: 'Fractional using co2 large area',
-      thumbAsset: _fractionalLaserThumbAsset,
+      thumbAsset:
+          'assets/Fractional Laser/Fractional using co2 large area.png',
     ),
     _SubServiceItem(
       title: 'Fractional using co2 medium area',
-      thumbAsset: _fractionalLaserThumbAsset,
+      thumbAsset:
+          'assets/Fractional Laser/Fractional using co2 medium area.png',
     ),
     _SubServiceItem(
       title: 'Fractional using CO2 Laser small area',
-      thumbAsset: _fractionalLaserThumbAsset,
+      thumbAsset:
+          'assets/Fractional Laser/Fractional using CO2 Laser small area.png',
     ),
     _SubServiceItem(
       title: 'Under Eye Fractional Advance with Fotona',
-      thumbAsset: _fractionalLaserThumbAsset,
+      thumbAsset:
+          'assets/Fractional Laser/Under Eye Fractional Advance with Fotona.png',
     ),
     _SubServiceItem(
       title: 'Lips Fractional advance with Fotona',
-      thumbAsset: _fractionalLaserThumbAsset,
+      thumbAsset:
+          'assets/Fractional Laser/Lips Fractional advance with Fotona.png',
     ),
   ];
 
   static const _xanthelasmaSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'Excision for Single Eye Small Area',
-      thumbAsset: _xanthelasmaThumbAsset,
+      thumbAsset:
+          'assets/Xanthelasma/Excision for Single Eye Small Area.png',
     ),
     _SubServiceItem(
       title: 'Excision for Single Eye Medium to Large Area',
-      thumbAsset: _xanthelasmaThumbAsset,
+      thumbAsset:
+          'assets/Xanthelasma/Excision for Single Eye Medium to Large Area.png',
     ),
   ];
 
   static const _microdermabrasionSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'Microdermabrasion with Led Light Therapy for face & neck',
-      thumbAsset: _microdermabrasionThumbAsset,
+      thumbAsset:
+          'assets/Microdermabrasion/Microdermabrasion with Led Light Therapy For face & neck.png',
     ),
     _SubServiceItem(
       title: 'Microdermabrasion Upper Back',
-      thumbAsset: _microdermabrasionThumbAsset,
+      thumbAsset:
+          'assets/Microdermabrasion/Microdermabrasion Upper Back.png',
     ),
     _SubServiceItem(
       title: 'Microdermabrasion Full Back',
-      thumbAsset: _microdermabrasionThumbAsset,
+      thumbAsset:
+          'assets/Microdermabrasion/Microdermabrasion Full Back.png',
     ),
     _SubServiceItem(
       title: 'Microdermabrasion Full Arm',
-      thumbAsset: _microdermabrasionThumbAsset,
+      thumbAsset:
+          'assets/Microdermabrasion/Microdermabrasion Full Arm.png',
     ),
     _SubServiceItem(
       title: 'Microdermabrasion Full Leg',
-      thumbAsset: _microdermabrasionThumbAsset,
+      thumbAsset:
+          'assets/Microdermabrasion/Microdermabrasion Full Leg.png',
     ),
     _SubServiceItem(
       title: 'Microdermabrasion Half Leg',
-      thumbAsset: _microdermabrasionThumbAsset,
+      thumbAsset:
+          'assets/Microdermabrasion/Microdermabrasion Half Leg.png',
     ),
     _SubServiceItem(
       title: 'Microdermabrasion Forearm',
-      thumbAsset: _microdermabrasionThumbAsset,
+      thumbAsset:
+          'assets/Microdermabrasion/Microdermabrasion Forearm.png',
     ),
   ];
 
   static const _exciplexSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'Exciplex (large area)',
-      thumbAsset: _exciplexThumbAsset,
+      thumbAsset: 'assets/Exciplex/Exciplex (large area).png',
     ),
     _SubServiceItem(
       title: 'Exciplex (medium area)',
-      thumbAsset: _exciplexThumbAsset,
+      thumbAsset: 'assets/Exciplex/Exciplex (medium area).png',
     ),
     _SubServiceItem(
       title: 'Exciplex (small area)',
-      thumbAsset: _exciplexThumbAsset,
+      thumbAsset: 'assets/Exciplex/Exciplex (small area).png',
     ),
-    _SubServiceItem(title: 'Exciplex test', thumbAsset: _exciplexThumbAsset),
+    _SubServiceItem(
+      title: 'Exciplex test',
+      thumbAsset: 'assets/Exciplex/Exciplex test.png',
+    ),
   ];
 
   static const _excisionSubItems = <_SubServiceItem>[
-    _SubServiceItem(title: 'Excision', thumbAsset: _excisionThumbAsset),
+    _SubServiceItem(
+      title: 'Excision',
+      thumbAsset: 'assets/Excision/Excision\u00a0.png',
+    ),
   ];
 
   static const _othersSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'Single Nail Avulsion',
-      thumbAsset: _othersThumbAsset,
+      thumbAsset: 'assets/Others/Single Nail Avulsion.png',
     ),
     _SubServiceItem(
       title: 'Face Analysing Test with Doctor consultation',
-      thumbAsset: _othersThumbAsset,
+      thumbAsset:
+          'assets/Others/Face Analysing Test with Doctor consultation.png',
     ),
     _SubServiceItem(
       title: 'Advance Hair Growth Booster',
-      thumbAsset: _othersThumbAsset,
+      thumbAsset: 'assets/Others/Advance Hair Growth Booster.png',
     ),
-    _SubServiceItem(title: 'Dermoscopy Test', thumbAsset: _othersThumbAsset),
+    _SubServiceItem(
+      title: 'Dermoscopy Test',
+      thumbAsset: 'assets/Others/Dermoscopy Test.png',
+    ),
     _SubServiceItem(
       title: "Wood's Lamp examination with report and doctor consultation",
-      thumbAsset: _othersThumbAsset,
+      thumbAsset:
+          "assets/Others/Wood's Lamp examination with report and doctor consultation.png",
     ),
   ];
 

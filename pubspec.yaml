@@ -70,6 +70,17 @@ flutter:
     - assets/njectable/
     - assets/Clinical/
     - assets/Chemical/
+    - assets/PRP/
+    - assets/CO2/
+    - assets/Botox/
+    - assets/Filler/
+    - assets/Pico Laser/
+    - assets/Fractional Laser/
+    - assets/Xanthelasma/
+    - assets/Microdermabrasion/
+    - assets/Exciplex/
+    - assets/Others/
+    - assets/Excision/
 
   fonts:
     - family: SilkSerif
