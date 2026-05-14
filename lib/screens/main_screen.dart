@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'clinics_screen.dart';
 import 'contact_screen.dart';
 import 'home_screen.dart';
 import 'services_screen.dart';
@@ -19,7 +20,7 @@ class _MainScreenState extends State<MainScreen> {
   final List<Widget> _pages = [
     const HomeScreen(),
     const ServicesScreen(),
-    const _PlaceholderPage(label: 'Clinics'),
+    const ClinicsScreen(),
     const ContactScreen(),
     const _PlaceholderPage(label: 'About'),
   ];

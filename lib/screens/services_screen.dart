@@ -128,7 +128,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
   static const _gridMainAxisSpacing = 14.0;
   static const _gridCrossAxisSpacing = 14.0;
   /// Fixed treatment tile height (design spec).
-  static const _treatmentCardHeight = 58.0;
+  static const _treatmentCardHeight = 72.0;
 
   static const _lhrThumbAsset =
       'assets/Services/Laser Hair Removal\u00a0.png';
@@ -562,7 +562,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
   static const _subGridCrossAxisCount = 2;
   static const _subGridMainAxisSpacing = 14.0;
   static const _subGridCrossAxisSpacing = 14.0;
-  static const _subRowHeight = 58.0;
+  static const _subRowHeight = 72.0;
 
   _CategoryDef? _visibleSelectedCategory() {
     final pi = _treatmentPageIndex;
@@ -581,8 +581,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
 
   static final _subSectionTitleStyle = AppFonts.poppins(
     color: _titleBrown,
-    fontSize: 16,
-    fontWeight: FontWeight.w600,
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
     height: 1.2,
   );
 
@@ -1208,7 +1208,7 @@ class _TreatmentSubServiceRow extends StatelessWidget {
                 overflow: TextOverflow.clip,
                 textAlign: TextAlign.start,
                 style: AppFonts.poppins(
-                  fontSize: 10,
+                  fontSize: 14,
                   fontWeight: FontWeight.w400,
                   color: _titleColor,
                   height: 1.25,
@@ -1279,8 +1279,8 @@ class _TreatmentCard extends StatelessWidget {
                   softWrap: true,
                   overflow: TextOverflow.clip,
                   style: AppFonts.poppins(
-                    fontSize: 10,
-                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
                     color: _titleColor,
                     height: 1.25,
                   ),
