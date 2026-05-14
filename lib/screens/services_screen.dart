@@ -5,10 +5,7 @@ import '../theme/app_typography.dart';
 
 /// One line in a treatment sub-section grid (e.g. LHR body area, Exosomes service).
 class _SubServiceItem {
-  const _SubServiceItem({
-    required this.title,
-    required this.thumbAsset,
-  });
+  const _SubServiceItem({required this.title, required this.thumbAsset});
 
   final String title;
   final String thumbAsset;
@@ -24,8 +21,10 @@ class ServicesScreen extends StatefulWidget {
 
 class _ServicesScreenState extends State<ServicesScreen> {
   final TextEditingController _searchController = TextEditingController();
+
   /// Eager init (not [late]) so [IndexedStack] offstage builds cannot hit an uninitialized controller.
   final PageController _treatmentPageController = PageController();
+
   /// Page 0 defaults to index 0 (All Procedures) so the combined catalog shows on load.
   final List<int> _selectedPerPage = List<int>.filled(
     _treatmentPages.length,
@@ -35,10 +34,12 @@ class _ServicesScreenState extends State<ServicesScreen> {
   int _treatmentPageIndex = 0;
 
   static const _bgCream = Color(0xFFF9F4EF);
+
   /// Total height of the hero image strip (design spec).
   static const _bannerHeight = 216.0;
   static const _bannerSearchBottomInset = 16.0;
   static const _headingToSearchGap = 24.0;
+
   /// Fixed height for bottom search bar layout (matches padding + one line).
   static const _searchBarHeight = 46.0;
   static const _titleBrown = Color(0xFF3D3530);
@@ -75,18 +76,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
       ),
     ],
     [
-      _CategoryDef(
-        label: 'PRP',
-        imageAsset: 'assets/Services/PRD.png',
-      ),
-      _CategoryDef(
-        label: 'CO2',
-        imageAsset: 'assets/Services/CO2\u00a0.png',
-      ),
-      _CategoryDef(
-        label: 'Botox',
-        imageAsset: 'assets/Services/Botox.png',
-      ),
+      _CategoryDef(label: 'PRP', imageAsset: 'assets/Services/PRD.png'),
+      _CategoryDef(label: 'CO2', imageAsset: 'assets/Services/CO2\u00a0.png'),
+      _CategoryDef(label: 'Botox', imageAsset: 'assets/Services/Botox.png'),
       _CategoryDef(
         label: 'Filler Injectable',
         imageAsset: 'assets/Services/Filler Injectable\u00a0.png',
@@ -127,14 +119,22 @@ class _ServicesScreenState extends State<ServicesScreen> {
   static const _gridCrossAxisCount = 3;
   static const _gridMainAxisSpacing = 14.0;
   static const _gridCrossAxisSpacing = 14.0;
-  /// Fixed treatment tile height (design spec).
-  static const _treatmentCardHeight = 72.0;
 
-  static const _lhrThumbAsset =
-      'assets/Services/Laser Hair Removal\u00a0.png';
+  /// Fixed treatment category tile size (design spec).
+  static const _treatmentCardWidth = 115.0;
+  static const _treatmentCardHeight = 86.0;
 
-  static const _exosomesPdrnThumbAsset =
-      'assets/Services/Exosomes + PDRN.svg';
+  /// Width of one row: [crossAxisCount] tiles + spacers.
+  static const _treatmentGridRowWidth =
+      _gridCrossAxisCount * _treatmentCardWidth +
+      (_gridCrossAxisCount - 1) * _gridCrossAxisSpacing;
+
+  /// Category switch icons in the Treatments grid (matches design: 31×31).
+  static const _treatmentCategoryIconSize = 31.0;
+
+  static const _lhrThumbAsset = 'assets/Services/Laser Hair Removal\u00a0.png';
+
+  static const _exosomesPdrnThumbAsset = 'assets/Services/Exosomes + PDRN.svg';
 
   static const _clinicalFacialThumbAsset =
       'assets/Services/Clinical Facial\u00a0.png';
@@ -150,17 +150,14 @@ class _ServicesScreenState extends State<ServicesScreen> {
   static const _botoxThumbAsset = 'assets/Services/Botox.png';
   static const _fillerInjectableThumbAsset =
       'assets/Services/Filler Injectable\u00a0.png';
-  static const _picoLaserThumbAsset =
-      'assets/Services/Pico Laser\u00a0.png';
+  static const _picoLaserThumbAsset = 'assets/Services/Pico Laser\u00a0.png';
   static const _fractionalLaserThumbAsset =
       'assets/Services/Fractional Laser\u00a0.png';
-  static const _xanthelasmaThumbAsset =
-      'assets/Services/Xanthelasma\u00a0.png';
+  static const _xanthelasmaThumbAsset = 'assets/Services/Xanthelasma\u00a0.png';
   static const _microdermabrasionThumbAsset =
       'assets/Services/Microdermabrasion\u00a0.png';
   static const _exciplexThumbAsset = 'assets/Services/Exciplex\u00a0.png';
-  static const _excisionThumbAsset =
-      'assets/Services/Excision\u00a0\u00a0.png';
+  static const _excisionThumbAsset = 'assets/Services/Excision\u00a0\u00a0.png';
   static const _othersThumbAsset = 'assets/Services/Others\u00a0.png';
 
   /// Body-area rows for [Laser Hair Removal] (thumbnails use placeholder until per-area assets exist).
@@ -243,10 +240,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
       title: 'Mesotherapy with microneedling',
       thumbAsset: _injectableItemThumbAsset,
     ),
-    _SubServiceItem(
-      title: 'NAD +',
-      thumbAsset: _injectableItemThumbAsset,
-    ),
+    _SubServiceItem(title: 'NAD +', thumbAsset: _injectableItemThumbAsset),
     _SubServiceItem(
       title: 'Lipolytic Injection For Double Chin (10ml)',
       thumbAsset: _injectableItemThumbAsset,
@@ -345,10 +339,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
       title: 'PRP for Face with LED Light',
       thumbAsset: _prpThumbAsset,
     ),
-    _SubServiceItem(
-      title: 'PRP for Hair',
-      thumbAsset: _prpThumbAsset,
-    ),
+    _SubServiceItem(title: 'PRP for Hair', thumbAsset: _prpThumbAsset),
     _SubServiceItem(
       title: 'PRP Under Eyes with Led Light',
       thumbAsset: _prpThumbAsset,
@@ -479,8 +470,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
 
   static const _microdermabrasionSubItems = <_SubServiceItem>[
     _SubServiceItem(
-      title:
-          'Microdermabrasion with Led Light Therapy for face & neck',
+      title: 'Microdermabrasion with Led Light Therapy for face & neck',
       thumbAsset: _microdermabrasionThumbAsset,
     ),
     _SubServiceItem(
@@ -522,17 +512,11 @@ class _ServicesScreenState extends State<ServicesScreen> {
       title: 'Exciplex (small area)',
       thumbAsset: _exciplexThumbAsset,
     ),
-    _SubServiceItem(
-      title: 'Exciplex test',
-      thumbAsset: _exciplexThumbAsset,
-    ),
+    _SubServiceItem(title: 'Exciplex test', thumbAsset: _exciplexThumbAsset),
   ];
 
   static const _excisionSubItems = <_SubServiceItem>[
-    _SubServiceItem(
-      title: 'Excision',
-      thumbAsset: _excisionThumbAsset,
-    ),
+    _SubServiceItem(title: 'Excision', thumbAsset: _excisionThumbAsset),
   ];
 
   static const _othersSubItems = <_SubServiceItem>[
@@ -548,13 +532,9 @@ class _ServicesScreenState extends State<ServicesScreen> {
       title: 'Advance Hair Growth Booster',
       thumbAsset: _othersThumbAsset,
     ),
+    _SubServiceItem(title: 'Dermoscopy Test', thumbAsset: _othersThumbAsset),
     _SubServiceItem(
-      title: 'Dermoscopy Test',
-      thumbAsset: _othersThumbAsset,
-    ),
-    _SubServiceItem(
-      title:
-          "Wood's Lamp examination with report and doctor consultation",
+      title: "Wood's Lamp examination with report and doctor consultation",
       thumbAsset: _othersThumbAsset,
     ),
   ];
@@ -575,8 +555,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
 
   double _twoColSubGridHeight(int itemCount) {
     final rows = (itemCount / _subGridCrossAxisCount).ceil();
-    return rows * _subRowHeight +
-        (rows - 1) * _subGridMainAxisSpacing;
+    return rows * _subRowHeight + (rows - 1) * _subGridMainAxisSpacing;
   }
 
   static final _subSectionTitleStyle = AppFonts.poppins(
@@ -727,10 +706,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
       'Filler Injectable',
       _twoColItemsGrid(_fillerInjectableSubItems),
     );
-    yield _headingAndBody(
-      'Pico Laser',
-      _twoColItemsGrid(_picoLaserSubItems),
-    );
+    yield _headingAndBody('Pico Laser', _twoColItemsGrid(_picoLaserSubItems));
     yield _headingAndBody(
       'Fractional Laser',
       _twoColItemsGrid(_fractionalLaserSubItems),
@@ -743,14 +719,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
       'Microdermabrasion',
       _twoColItemsGrid(_microdermabrasionSubItems),
     );
-    yield _headingAndBody(
-      'Exciplex',
-      _twoColItemsGrid(_exciplexSubItems),
-    );
-    yield _headingAndBody(
-      'Excision',
-      _twoColItemsGrid(_excisionSubItems),
-    );
+    yield _headingAndBody('Exciplex', _twoColItemsGrid(_exciplexSubItems));
+    yield _headingAndBody('Excision', _twoColItemsGrid(_excisionSubItems));
     yield _headingAndBody('Others', _othersGridColumn());
   }
 
@@ -832,7 +802,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   Positioned(
                     left: 20,
                     right: 20,
-                    bottom: _bannerSearchBottomInset +
+                    bottom:
+                        _bannerSearchBottomInset +
                         _searchBarHeight +
                         _headingToSearchGap,
                     child: Column(
@@ -868,9 +839,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     bottom: _bannerSearchBottomInset,
                     child: SizedBox(
                       height: _searchBarHeight,
-                      child: _SearchField(
-                        controller: _searchController,
-                      ),
+                      child: _SearchField(controller: _searchController),
                     ),
                   ),
                 ],
@@ -901,61 +870,68 @@ class _ServicesScreenState extends State<ServicesScreen> {
                       },
                       itemBuilder: (context, pageIndex) {
                         final page = _treatmentPages[pageIndex];
-                        final slotCount = ((page.length +
-                                    _gridCrossAxisCount -
-                                    1) ~/
+                        final slotCount =
+                            ((page.length + _gridCrossAxisCount - 1) ~/
                                 _gridCrossAxisCount) *
                             _gridCrossAxisCount;
-                        return GridView.builder(
-                          padding: EdgeInsets.zero,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: _gridCrossAxisCount,
-                            mainAxisSpacing: _gridMainAxisSpacing,
-                            crossAxisSpacing: _gridCrossAxisSpacing,
-                            mainAxisExtent: _treatmentCardHeight,
+                        return Center(
+                          child: SizedBox(
+                            width: _treatmentGridRowWidth,
+                            child: GridView.builder(
+                              padding: EdgeInsets.zero,
+                              physics: const NeverScrollableScrollPhysics(),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: _gridCrossAxisCount,
+                                    mainAxisSpacing: _gridMainAxisSpacing,
+                                    crossAxisSpacing: _gridCrossAxisSpacing,
+                                    mainAxisExtent: _treatmentCardHeight,
+                                  ),
+                              itemCount: slotCount,
+                              itemBuilder: (context, index) {
+                                if (index >= page.length) {
+                                  return const IgnorePointer(
+                                    child: SizedBox.expand(),
+                                  );
+                                }
+                                final def = page[index];
+                                final selected =
+                                    index == _selectedPerPage[pageIndex];
+                                return _TreatmentCard(
+                                  label: def.label,
+                                  selected: selected,
+                                  onTap: () => setState(
+                                    () => _selectedPerPage[pageIndex] = index,
+                                  ),
+                                  child: def.imageAsset != null
+                                      ? def.imageAsset!.endsWith('.svg')
+                                            ? SvgPicture.asset(
+                                                def.imageAsset!,
+                                                width:
+                                                    _treatmentCategoryIconSize,
+                                                height:
+                                                    _treatmentCategoryIconSize,
+                                                fit: BoxFit.contain,
+                                                alignment: Alignment.center,
+                                              )
+                                            : Image.asset(
+                                                def.imageAsset!,
+                                                width:
+                                                    _treatmentCategoryIconSize,
+                                                height:
+                                                    _treatmentCategoryIconSize,
+                                                fit: BoxFit.contain,
+                                                alignment: Alignment.center,
+                                              )
+                                      : Icon(
+                                          def.icon,
+                                          size: _treatmentCategoryIconSize,
+                                          color: def.iconColor(selected),
+                                        ),
+                                );
+                              },
+                            ),
                           ),
-                          itemCount: slotCount,
-                          itemBuilder: (context, index) {
-                            if (index >= page.length) {
-                              return const IgnorePointer(
-                                child: SizedBox.expand(),
-                              );
-                            }
-                            final def = page[index];
-                            final selected =
-                                index == _selectedPerPage[pageIndex];
-                            return _TreatmentCard(
-                              label: def.label,
-                              selected: selected,
-                              onTap: () => setState(
-                                () => _selectedPerPage[pageIndex] = index,
-                              ),
-                              child: def.imageAsset != null
-                                  ? Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 4,
-                                      ),
-                                      child: def.imageAsset!.endsWith('.svg')
-                                          ? SvgPicture.asset(
-                                              def.imageAsset!,
-                                              fit: BoxFit.contain,
-                                              alignment: Alignment.center,
-                                            )
-                                          : Image.asset(
-                                              def.imageAsset!,
-                                              fit: BoxFit.contain,
-                                              alignment: Alignment.center,
-                                            ),
-                                    )
-                                  : Icon(
-                                      def.icon,
-                                      size: 40,
-                                      color: def.iconColor(selected),
-                                    ),
-                            );
-                          },
                         );
                       },
                     ),
@@ -964,35 +940,28 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   Center(
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: List.generate(
-                        _treatmentPages.length,
-                        (i) {
-                          final active = i == _treatmentPageIndex;
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              left: i == 0 ? 0 : 8,
-                            ),
-                            child: GestureDetector(
-                              onTap: () => _goToTreatmentPage(i),
-                              behavior: HitTestBehavior.opaque,
-                              child: AnimatedContainer(
-                                duration: const Duration(
-                                  milliseconds: 220,
-                                ),
-                                curve: Curves.easeOutCubic,
-                                width: active ? 28 : 8,
-                                height: 8,
-                                decoration: BoxDecoration(
-                                  color: active
-                                      ? _indicatorActive
-                                      : _indicatorIdle,
-                                  borderRadius: BorderRadius.circular(999),
-                                ),
+                      children: List.generate(_treatmentPages.length, (i) {
+                        final active = i == _treatmentPageIndex;
+                        return Padding(
+                          padding: EdgeInsets.only(left: i == 0 ? 0 : 8),
+                          child: GestureDetector(
+                            onTap: () => _goToTreatmentPage(i),
+                            behavior: HitTestBehavior.opaque,
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 220),
+                              curve: Curves.easeOutCubic,
+                              width: active ? 28 : 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: active
+                                    ? _indicatorActive
+                                    : _indicatorIdle,
+                                borderRadius: BorderRadius.circular(999),
                               ),
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      }),
                     ),
                   ),
                   ..._allProceduresSubSections(),
@@ -1071,11 +1040,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
 }
 
 class _CategoryDef {
-  const _CategoryDef({
-    required this.label,
-    this.icon,
-    this.imageAsset,
-  }) : assert(icon != null || imageAsset != null);
+  const _CategoryDef({required this.label, this.icon, this.imageAsset})
+    : assert(icon != null || imageAsset != null);
 
   final String label;
   final IconData? icon;
@@ -1255,22 +1221,14 @@ class _TreatmentCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: selected ? _activeFill : _idleFill,
             borderRadius: BorderRadius.circular(_cardRadius),
-            border: selected
-                ? null
-                : Border.all(
-                    color: _borderColor,
-                    width: 1,
-                  ),
+            border: selected ? null : Border.all(color: _borderColor, width: 1),
           ),
           child: Padding(
             padding: const EdgeInsets.all(_cardPadding),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Flexible(
-                  flex: 2,
-                  child: Center(child: child),
-                ),
+                Flexible(flex: 2, child: Center(child: child)),
                 const SizedBox(height: _iconTitleGap),
                 Text(
                   label,
