@@ -53,7 +53,8 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final overlayStyle = (_currentIndex == 0 ||
             _currentIndex == 1 ||
-            _currentIndex == 2)
+            _currentIndex == 2 ||
+            _currentIndex == 3)
         ? _homeStatusOverlay
         : _lightScreenStatusOverlay;
 

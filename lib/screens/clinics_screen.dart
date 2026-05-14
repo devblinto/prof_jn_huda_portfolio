@@ -173,7 +173,6 @@ class _HeroWithMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topInset = MediaQuery.paddingOf(context).top;
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -203,37 +202,6 @@ class _HeroWithMap extends StatelessWidget {
                   DecoratedBox(
                     decoration: BoxDecoration(
                       color: Colors.black.withValues(alpha: 0.38),
-                    ),
-                  ),
-                  Positioned(
-                    left: 20,
-                    right: 20,
-                    top: topInset + 20,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'SKINN',
-                          style: AppFonts.silkSerif(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 4,
-                            height: 1.0,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          'Clinics',
-                          style: AppFonts.silkSerif(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w700,
-                            height: 1.1,
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ],
