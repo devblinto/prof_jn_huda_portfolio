@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'about_screen.dart';
 import 'clinics_screen.dart';
 import 'contact_screen.dart';
 import 'home_screen.dart';
@@ -17,17 +18,21 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = [
-    const HomeScreen(),
-    const ServicesScreen(),
-    const ClinicsScreen(),
-    const ContactScreen(),
-    const _PlaceholderPage(label: 'About'),
-  ];
+  late final List<Widget> _pages;
 
   @override
   void initState() {
     super.initState();
+    _pages = [
+      const HomeScreen(),
+      const ServicesScreen(),
+      const ClinicsScreen(),
+      const ContactScreen(),
+      AboutScreen(
+        onBookAppointment: () => setState(() => _currentIndex = 3),
+        onFindClinics: () => setState(() => _currentIndex = 2),
+      ),
+    ];
     WidgetsBinding.instance.addPostFrameCallback((_) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     });
@@ -54,7 +59,8 @@ class _MainScreenState extends State<MainScreen> {
     final overlayStyle = (_currentIndex == 0 ||
             _currentIndex == 1 ||
             _currentIndex == 2 ||
-            _currentIndex == 3)
+            _currentIndex == 3 ||
+            _currentIndex == 4)
         ? _homeStatusOverlay
         : _lightScreenStatusOverlay;
 
@@ -158,23 +164,4 @@ class _NavItem {
 
   final String label;
   final String assetPath;
-}
-
-class _PlaceholderPage extends StatelessWidget {
-  const _PlaceholderPage({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        label,
-        style: const TextStyle(
-          fontSize: 24,
-          color: Color(0xFF5A5A5A),
-        ),
-      ),
-    );
-  }
 }
