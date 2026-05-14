@@ -65,6 +65,11 @@ flutter:
     - assets/Icons/
     - assets/Services/
     - assets/Swervice/
+    - assets/Hair Removal/
+    - assets/PDRN/
+    - assets/njectable/
+    - assets/Clinical/
+    - assets/Chemical/
 
   fonts:
     - family: SilkSerif

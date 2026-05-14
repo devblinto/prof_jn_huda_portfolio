@@ -132,19 +132,6 @@ class _ServicesScreenState extends State<ServicesScreen> {
   /// Category switch icons in the Treatments grid (matches design: 31×31).
   static const _treatmentCategoryIconSize = 31.0;
 
-  static const _lhrThumbAsset = 'assets/Services/Laser Hair Removal\u00a0.png';
-
-  static const _exosomesPdrnThumbAsset = 'assets/Services/Exosomes + PDRN.svg';
-
-  static const _clinicalFacialThumbAsset =
-      'assets/Services/Clinical Facial\u00a0.png';
-
-  static const _injectableItemThumbAsset =
-      'assets/Services/Injectable Item\u00a0.png';
-
-  static const _chemicalPeelingThumbAsset =
-      'assets/Services/Chemical Peeling\u00a0.png';
-
   static const _prpThumbAsset = 'assets/Services/PRD.png';
   static const _co2ThumbAsset = 'assets/Services/CO2\u00a0.png';
   static const _botoxThumbAsset = 'assets/Services/Botox.png';
@@ -160,177 +147,263 @@ class _ServicesScreenState extends State<ServicesScreen> {
   static const _excisionThumbAsset = 'assets/Services/Excision\u00a0\u00a0.png';
   static const _othersThumbAsset = 'assets/Services/Others\u00a0.png';
 
-  /// Body-area rows for [Laser Hair Removal] (thumbnails use placeholder until per-area assets exist).
-  static const _laserHairRemovalSubItems = <String>[
-    'LHR abdomen',
-    'LHR bikini',
-    'LHR cheeks',
-    'LHR chin',
-    'LHR Both Full Arms',
-    'LHR full back',
-    'LHR full body & face',
-    'LHR full body excluding face',
-    'LHR full chest',
-    'LHR full face & neck',
-    'LHR full face',
-    'LHR Forearm',
-    'LHR under arms',
-    'LHR Half legs',
-    'LHR upper lip',
-    'LHR full legs',
-    'LHR neck (front back)',
-    'LHR Both Hands',
-    'LHR shoulders',
-    'LHR Both Feet',
-    'LHR Forehead',
-    'LHR Both Buttocks',
-    'LHR Sideburn',
-    'LHR Thighs',
+  /// Body-area rows for [Laser Hair Removal] (thumbnails from [assets/Hair Removal/] where available).
+  static const _laserHairRemovalSubItems = <_SubServiceItem>[
+    _SubServiceItem(
+      title: 'LHR abdomen',
+      thumbAsset: 'assets/Hair Removal/LHR abdomen.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR bikini',
+      thumbAsset: 'assets/Hair Removal/LHR bikini.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR cheeks',
+      thumbAsset: 'assets/Hair Removal/LHR cheeks.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR chin',
+      thumbAsset: 'assets/Hair Removal/LHR chin.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR Both Full Arms',
+      thumbAsset: 'assets/Hair Removal/LHR Both Full Arms.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR full back',
+      thumbAsset: 'assets/Hair Removal/LHR full back.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR full body & face',
+      thumbAsset: 'assets/Hair Removal/LHR full body & face.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR full body excluding face',
+      thumbAsset: 'assets/Hair Removal/LHR full body excluding face.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR full chest',
+      thumbAsset: 'assets/Hair Removal/LHR full chest.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR full face & neck',
+      thumbAsset: 'assets/Hair Removal/LHR full face & neck.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR full face',
+      thumbAsset: 'assets/Hair Removal/LHR full face.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR Forearm',
+      thumbAsset: 'assets/Hair Removal/LHR Forearm.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR under arms',
+      thumbAsset: 'assets/Hair Removal/LHR under arms.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR Half legs',
+      thumbAsset: 'assets/Hair Removal/LHR Half legs.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR upper lip',
+      thumbAsset: 'assets/Hair Removal/LHR upper lip.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR full legs',
+      thumbAsset: 'assets/Hair Removal/LHR full legs.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR neck (front back)',
+      thumbAsset: 'assets/Hair Removal/LHR neck (front back).png',
+    ),
+    _SubServiceItem(
+      title: 'LHR Both Hands',
+      thumbAsset: 'assets/Hair Removal/LHR Both Hands.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR shoulders',
+      thumbAsset: 'assets/Hair Removal/LHR shoulders.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR Both Feet',
+      thumbAsset: 'assets/Hair Removal/LHR Both Feet.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR Forehead',
+      thumbAsset: 'assets/Hair Removal/LHR Forehead.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR Both Buttocks',
+      thumbAsset: 'assets/Hair Removal/LHR Both Buttocks.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR Sideburn',
+      thumbAsset: 'assets/Hair Removal/LHR Sideburn.png',
+    ),
+    _SubServiceItem(
+      title: 'LHR Thighs',
+      thumbAsset: 'assets/Hair Removal/LHR Thighs.png',
+    ),
   ];
 
   static const _exosomesPdrnSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'Exosome with PDRN with GFP for Hair with LED Light',
-      thumbAsset: _exosomesPdrnThumbAsset,
+      thumbAsset:
+          'assets/PDRN/Exosome with PDRN with GFP for Hair with LED Light.png',
     ),
     _SubServiceItem(
       title: 'T-Lab Exosomes + Hair PRP Treatment and LED light',
-      thumbAsset: _exosomesPdrnThumbAsset,
+      thumbAsset:
+          'assets/PDRN/T-Lab Exosomes + Hair PRP Treatment and LED light.png',
     ),
     _SubServiceItem(
       title:
           'Tlab Exosomes + PDRN for Face Mesotherapy Treatment and LED light',
-      thumbAsset: _exosomesPdrnThumbAsset,
+      thumbAsset:
+          'assets/PDRN/Tlab Exosomes + PDRN for Face Mesotherapy Treatment and LED light.png',
     ),
     _SubServiceItem(
       title: 'Exosome with PDRN with GFP Face with LED Light',
-      thumbAsset: _exosomesPdrnThumbAsset,
+      thumbAsset:
+          'assets/PDRN/Exosome with PDRN with GFP Face with LED Light.png',
     ),
   ];
 
   static const _clinicalFacialSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'BTL Emfusion',
-      thumbAsset: _clinicalFacialThumbAsset,
+      thumbAsset: 'assets/Clinical/BTL Emfusion.png',
     ),
     _SubServiceItem(
       title: 'Advance Hydrafacial & LED Therapy',
-      thumbAsset: _clinicalFacialThumbAsset,
+      thumbAsset: 'assets/Clinical/Advance Hydrafacial & LED Therapy.png',
     ),
     _SubServiceItem(
       title: 'Advance carbon facial with PicoStar',
-      thumbAsset: _clinicalFacialThumbAsset,
+      thumbAsset:
+          'assets/Clinical/Advance carbon facial with PicoStar.png',
     ),
   ];
 
   static const _injectableItemSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'Brightening IV Drip - Advance Swiss Glutathione',
-      thumbAsset: _injectableItemThumbAsset,
+      thumbAsset:
+          'assets/njectable/Brightening IV Drip - Advance Swiss Glutathione.png',
     ),
     _SubServiceItem(
       title: 'Lipolytic Injection For Abdomen (20ml)',
-      thumbAsset: _injectableItemThumbAsset,
+      thumbAsset:
+          'assets/njectable/Lipolytic Injection For Abdomen (20ml).png',
     ),
     _SubServiceItem(
       title: 'Keloid scar treatment - injection',
-      thumbAsset: _injectableItemThumbAsset,
+      thumbAsset:
+          'assets/njectable/Keloid scar treatment - injection.png',
     ),
     _SubServiceItem(
       title: 'Mesotherapy with microneedling',
-      thumbAsset: _injectableItemThumbAsset,
+      thumbAsset:
+          'assets/njectable/Mesotheraphy with microneedling.png',
     ),
-    _SubServiceItem(title: 'NAD +', thumbAsset: _injectableItemThumbAsset),
+    _SubServiceItem(
+      title: 'NAD +',
+      thumbAsset: 'assets/njectable/NAD +.png',
+    ),
     _SubServiceItem(
       title: 'Lipolytic Injection For Double Chin (10ml)',
-      thumbAsset: _injectableItemThumbAsset,
+      thumbAsset:
+          'assets/njectable/Lipolytic Injection For Double Chin (10ml).png',
     ),
     _SubServiceItem(
       title: 'PROFHILO Skin Booster (European)',
-      thumbAsset: _injectableItemThumbAsset,
+      thumbAsset:
+          'assets/njectable/PROFHILO Skin Booster (European).png',
     ),
     _SubServiceItem(
       title: 'Skin Booster (Korean)',
-      thumbAsset: _injectableItemThumbAsset,
+      thumbAsset: 'assets/njectable/Skin Booster (Korean).png',
     ),
   ];
 
   static const _chemicalPeelingSubItems = <_SubServiceItem>[
     _SubServiceItem(
       title: 'Chemical Peeling Face',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Face.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Neck',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Neck.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Full Leg',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Full Leg.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peel Arms',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peel Arms.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Feet',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Feet.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Knee',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Knee.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peel Bikini Area',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peel Bikini Area.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peel Under arms',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peel Under arms.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Half Legs',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Half Legs.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Half Legs',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Half Legs.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Buttock',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Buttock.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Face and Neck',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Face and Neck.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Full Back',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Full Back.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Hand',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Hand.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Upper back',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Upper back.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Forearm',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Forearm.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Under Eye',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Under Eye.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Elbow',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Elbow.png',
     ),
     _SubServiceItem(
       title: 'Chemical Peeling Lips',
-      thumbAsset: _chemicalPeelingThumbAsset,
+      thumbAsset: 'assets/Chemical/Chemical Peeling Lips.png',
     ),
   ];
 
@@ -592,9 +665,10 @@ class _ServicesScreenState extends State<ServicesScreen> {
         ),
         itemCount: _laserHairRemovalSubItems.length,
         itemBuilder: (context, i) {
+          final item = _laserHairRemovalSubItems[i];
           return _TreatmentSubServiceRow(
-            title: _laserHairRemovalSubItems[i],
-            thumbAsset: _lhrThumbAsset,
+            title: item.title,
+            thumbAsset: item.thumbAsset,
           );
         },
       ),
@@ -1109,7 +1183,8 @@ class _SearchField extends StatelessWidget {
   }
 }
 
-/// Horizontal sub-service row: rounded thumb + procedure title (up to 3 lines).
+/// Sub-service tile: rounded thumb + title, left-aligned in the card (row vertically
+/// centered in the grid cell when taller than one line).
 class _TreatmentSubServiceRow extends StatelessWidget {
   const _TreatmentSubServiceRow({
     required this.title,
@@ -1152,37 +1227,51 @@ class _TreatmentSubServiceRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(_cardRadius),
         border: Border.all(color: _borderColor, width: 1),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(_cardPadding),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(_thumbRadius),
-              child: SizedBox(
-                width: _thumbSize,
-                height: _thumbSize,
-                child: thumb,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final h = constraints.maxHeight;
+          final w = constraints.maxWidth;
+          final bounded = h.isFinite && w.isFinite;
+          final content = Padding(
+            padding: const EdgeInsets.all(_cardPadding),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(_thumbRadius),
+                    child: SizedBox(
+                      width: _thumbSize,
+                      height: _thumbSize,
+                      child: thumb,
+                    ),
+                  ),
+                  const SizedBox(width: _thumbGap),
+                  Expanded(
+                    child: Text(
+                      title,
+                      maxLines: _procedureTitleMaxLines,
+                      softWrap: true,
+                      overflow: TextOverflow.clip,
+                      textAlign: TextAlign.start,
+                      style: AppFonts.poppins(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: _titleColor,
+                        height: 1.25,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            const SizedBox(width: _thumbGap),
-            Expanded(
-              child: Text(
-                title,
-                maxLines: _procedureTitleMaxLines,
-                softWrap: true,
-                overflow: TextOverflow.clip,
-                textAlign: TextAlign.start,
-                style: AppFonts.poppins(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                  color: _titleColor,
-                  height: 1.25,
-                ),
-              ),
-            ),
-          ],
-        ),
+          );
+          if (bounded) {
+            return SizedBox(width: w, height: h, child: content);
+          }
+          return content;
+        },
       ),
     );
   }
