@@ -37,4 +37,14 @@ abstract final class AppFonts {
       letterSpacing: letterSpacing,
     );
   }
+
+  /// Poppins 16px, weight medium (500) — Services category block titles & Latest Offer.
+  static TextStyle servicesCategoryTitle({Color? color}) {
+    return poppins(
+      fontSize: 16,
+      fontWeight: FontWeight.w500,
+      color: color ?? const Color(0xFF3D3530),
+      height: 1.2,
+    );
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../theme/app_typography.dart';
+import '../widgets/latest_offer_section.dart';
 
 /// One line in a treatment sub-section grid (e.g. LHR body area, Exosomes service).
 class _SubServiceItem {
@@ -647,12 +648,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
     return rows * _subRowHeight + (rows - 1) * _subGridMainAxisSpacing;
   }
 
-  static final _subSectionTitleStyle = AppFonts.poppins(
-    color: _titleBrown,
-    fontSize: 14,
-    fontWeight: FontWeight.w500,
-    height: 1.2,
-  );
+  static final _subSectionTitleStyle =
+      AppFonts.servicesCategoryTitle(color: _titleBrown);
 
   Widget _headingAndBody(String heading, Widget body) {
     return Column(
@@ -1119,6 +1116,15 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     _excisionSubItems,
                   ),
                   ..._othersSubSection(),
+                  if (_visibleSelectedCategory() != null)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24),
+                      child: LatestOfferSection(
+                        sectionTopPadding: 0,
+                        horizontalPadding: 0,
+                        titleStyle: _subSectionTitleStyle,
+                      ),
+                    ),
                 ],
               ),
             ),
