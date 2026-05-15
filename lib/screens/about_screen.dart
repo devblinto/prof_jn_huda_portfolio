@@ -271,7 +271,7 @@ class _SectionTitle extends StatelessWidget {
       style: AppFonts.silkSerif(
         fontSize: 18,
         fontWeight: FontWeight.w600,
-        color: AboutScreen._headingBrown,
+        color: AboutScreen._nameBlack,
         height: 1.2,
       ),
     );
