@@ -24,7 +24,11 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
     _pages = [
-      const HomeScreen(),
+      HomeScreen(
+        onBookAppointment: () => setState(() => _currentIndex = 3),
+        onFindClinics: () => setState(() => _currentIndex = 2),
+        onViewAllServices: () => setState(() => _currentIndex = 1),
+      ),
       const ServicesScreen(),
       const ClinicsScreen(),
       const ContactScreen(),

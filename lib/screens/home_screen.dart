@@ -6,7 +6,16 @@ import '../theme/app_typography.dart';
 import '../widgets/latest_offer_section.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    super.key,
+    required this.onBookAppointment,
+    required this.onFindClinics,
+    required this.onViewAllServices,
+  });
+
+  final VoidCallback onBookAppointment;
+  final VoidCallback onFindClinics;
+  final VoidCallback onViewAllServices;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +30,14 @@ class HomeScreen extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              _HeroCard(),
-              _ServicesSection(),
-              LatestOfferSection(heading: 'Latest Updates'),
-              SizedBox(height: 24),
+            children: [
+              _HeroCard(
+                onBookAppointment: onBookAppointment,
+                onFindClinics: onFindClinics,
+              ),
+              _ServicesSection(onViewAllServices: onViewAllServices),
+              const LatestOfferSection(heading: 'Latest Updates'),
+              const SizedBox(height: 24),
             ],
           ),
         ),
@@ -37,7 +49,13 @@ class HomeScreen extends StatelessWidget {
 // ─── Hero card ───────────────────────────────────────────────────────────────
 
 class _HeroCard extends StatelessWidget {
-  const _HeroCard();
+  const _HeroCard({
+    required this.onBookAppointment,
+    required this.onFindClinics,
+  });
+
+  final VoidCallback onBookAppointment;
+  final VoidCallback onFindClinics;
 
   static const _radius = 8.0;
 
@@ -233,7 +251,7 @@ class _HeroCard extends StatelessWidget {
                       child: _HeroCtaButton(
                         svgAsset: 'assets/Icons/book-appoinment.svg',
                         label: 'Book Appointment',
-                        onTap: () {},
+                        onTap: onBookAppointment,
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -241,7 +259,7 @@ class _HeroCard extends StatelessWidget {
                       child: _HeroCtaButton(
                         svgAsset: 'assets/Icons/location.svg',
                         label: 'Find Clinics',
-                        onTap: () {},
+                        onTap: onFindClinics,
                       ),
                     ),
                   ],
@@ -270,55 +288,78 @@ class _HeroCtaButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final radius = BorderRadius.circular(_HeroCard._radius);
     return GestureDetector(
       onTap: onTap,
       child: SizedBox.expand(
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: _HeroCard._ctaBg,
-            borderRadius: BorderRadius.circular(_HeroCard._radius),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Center(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.center,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: _iconSize + 2,
-                      height: _iconSize + 2,
-                      child: Center(
-                        child: SvgPicture.asset(
-                          svgAsset,
-                          width: _iconSize,
-                          height: _iconSize,
-                          colorFilter: const ColorFilter.mode(
-                            _HeroCard._ctaFg,
-                            BlendMode.srcIn,
-                          ),
-                        ),
+        child: ClipRRect(
+          borderRadius: radius,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              const ColoredBox(color: _HeroCard._ctaBg),
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.07),
+                          Colors.transparent,
+                          Colors.transparent,
+                          Colors.black.withValues(alpha: 0.11),
+                        ],
+                        stops: const [0.0, 0.22, 0.62, 1.0],
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Text(
-                      label,
-                      maxLines: 1,
-                      style: AppFonts.poppins(
-                        color: _HeroCard._ctaFg,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        height: 1.1,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Center(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: _iconSize + 2,
+                          height: _iconSize + 2,
+                          child: Center(
+                            child: SvgPicture.asset(
+                              svgAsset,
+                              width: _iconSize,
+                              height: _iconSize,
+                              colorFilter: const ColorFilter.mode(
+                                _HeroCard._ctaFg,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          label,
+                          maxLines: 1,
+                          style: AppFonts.poppins(
+                            color: _HeroCard._ctaFg,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            height: 1.1,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -329,7 +370,9 @@ class _HeroCtaButton extends StatelessWidget {
 // ─── Services section ─────────────────────────────────────────────────────────
 
 class _ServicesSection extends StatelessWidget {
-  const _ServicesSection();
+  const _ServicesSection({required this.onViewAllServices});
+
+  final VoidCallback onViewAllServices;
 
   static const _services = [
     _ServiceItem(
@@ -367,6 +410,9 @@ class _ServicesSection extends StatelessWidget {
   /// Negative values pull the grid up (overlap) via [Transform.translate].
   static const _headerBottomGap = -24.0;
 
+  /// Matches the “Services” / “View All” row height so the grid overlap matches layout.
+  static const _servicesHeaderRowHeight = 28.0;
+
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
@@ -386,67 +432,85 @@ class _ServicesSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(height: _headerTopGap),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                Stack(
+                  clipBehavior: Clip.none,
                   children: [
-                    Text(
-                      'Services',
-                      style: AppFonts.silkSerif(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF000000),
-                        height: 1.15,
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: _servicesHeaderRowHeight),
+                      child: Transform.translate(
+                        offset: Offset(
+                          0,
+                          _headerBottomGap < 0 ? _headerBottomGap : 0,
+                        ),
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _services.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: crossSpacing,
+                            mainAxisSpacing: mainSpacing,
+                            childAspectRatio: childAspectRatio,
+                          ),
+                          itemBuilder: (_, i) {
+                            final s = _services[i];
+                            return _ServiceCard(
+                              label: s.label,
+                              assetPath: s.assetPath,
+                            );
+                          },
+                        ),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {},
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            'View All',
-                            style: AppFonts.poppins(
+                            'Services',
+                            style: AppFonts.silkSerif(
                               fontSize: 18,
-                              color: const Color(0xFF6B6B6B),
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
+                              color: const Color(0xFF000000),
+                              height: 1.15,
                             ),
                           ),
-                          const SizedBox(width: 2),
-                          const Icon(
-                            Icons.chevron_right,
-                            size: 22,
-                            color: Color(0xFF6B6B6B),
+                          GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: onViewAllServices,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 4, 0, 4),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    'View All',
+                                    style: AppFonts.poppins(
+                                      fontSize: 16,
+                                      color: const Color(0xFF605851),
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 2),
+                                  const Icon(
+                                    Icons.chevron_right,
+                                    size: 20,
+                                    color: Color(0xFF605851),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
                   ],
-                ),
-                if (_headerBottomGap > 0)
-                  SizedBox(height: _headerBottomGap),
-                Transform.translate(
-                  offset: Offset(
-                    0,
-                    _headerBottomGap < 0 ? _headerBottomGap : 0,
-                  ),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _services.length,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: crossSpacing,
-                      mainAxisSpacing: mainSpacing,
-                      childAspectRatio: childAspectRatio,
-                    ),
-                    itemBuilder: (_, i) {
-                      final s = _services[i];
-                      return _ServiceCard(
-                        label: s.label,
-                        assetPath: s.assetPath,
-                      );
-                    },
-                  ),
                 ),
               ],
             );
