@@ -16,12 +16,12 @@ class AboutScreen extends StatelessWidget {
 
   static const _pageBg = Color(0xFFFDF8F5);
   static const _headingBrown = Color(0xFF605851);
-  static const _cardTitle = Color(0xFF0A0A0A);
+  static const _nameBlack = Color(0xFF000000);
+  static const _roleSubtitle = Color(0xFFFCFAF9);
   static const _cardDetail = Color(0xFFA3948A);
   static const _cardBorder = Color(0xFFD0BEB1);
-  static const _bioBody = Color(0xFF7E736B);
   static const _ctaBg = Color(0xFFE6D5C8);
-  static const _ctaFg = Color(0xFF4A3F38);
+  static const _ctaText = Color(0xFF4F3F35);
 
   static const _education = <_Credential>[
     _Credential(
@@ -29,12 +29,12 @@ class AboutScreen extends StatelessWidget {
       detail: 'Rangpur Medical College • 1977',
     ),
     _Credential(
-      title: 'DDV (Dermatology & Venereology)',
-      detail: 'University of Dhaka • 1982',
+      title: 'FCPS in Medicine',
+      detail: 'Bangladesh College of Physicians & Surgeons • 1985',
     ),
     _Credential(
-      title: 'Fellowship (Advanced Dermatology)',
-      detail: 'International Training Centre • 1990',
+      title: 'Fellowship in Cardiology',
+      detail: 'National Institute of Cardiovascular Diseases • 1992',
     ),
   ];
 
@@ -44,30 +44,23 @@ class AboutScreen extends StatelessWidget {
       detail: 'Square Hospital • 2020 – Present',
     ),
     _Credential(
-      title: 'Professor & Head of Department',
-      detail: 'Bangabandhu Sheikh Mujib Medical University • 2005 – 2019',
-    ),
-    _Credential(
-      title: 'Consultant Dermatologist',
-      detail: 'Combined Military Hospital • 1995 – 2005',
+      title: 'Specialist',
+      detail: 'National Heart Foundation • 2015 – 2020',
     ),
   ];
 
   static const _experienceCerts = <_Credential>[
     _Credential(
-      title: 'Advanced Cardiac Life Support',
-      detail: 'American Heart Association • 2019',
-    ),
-    _Credential(
-      title: 'Laser & Aesthetic Dermatology',
-      detail: 'International Society of Dermatology • 2016',
+      title: 'Echocardiography Specialist',
+      detail: 'International Board of Heart Imaging • 2018',
     ),
   ];
 
   static const _bio =
-      'Prof. M.N. Huda is a leading dermatologist with over four decades of '
-      'clinical excellence in skin disease, venereology, and aesthetic care. He '
-      'combines academic rigour with compassionate, patient-centred treatment.';
+      'Prof. M.N. Huda is a pioneering dermatologist recognized across Southeast Asia. '
+      'Since beginning his medical career in 1977, he has introduced modern dermatosurgery '
+      'and advanced laser therapies to Bangladesh. With decades of global experience, '
+      'teaching, and research, he continues to lead the region in innovative dermatological care.';
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +75,7 @@ class AboutScreen extends StatelessWidget {
           slivers: [
             SliverToBoxAdapter(child: _ProfileHero()),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 20, 16, 24),
+              padding: const EdgeInsets.fromLTRB(16, 80, 16, 24),
               sliver: SliverList(
                 delegate: SliverChildListDelegate([
                   const _SectionTitle('Education'),
@@ -128,14 +121,16 @@ class _Credential {
 }
 
 class _ProfileHero extends StatelessWidget {
-  static const _heroH = 232.0;
-  static const _cardOverlap = 100.0;
-  /// Vertical space reserved for the profile card below the overlap line.
-  static const _cardBodyBelowOverlap = 300.0;
+  static const _heroH = 286.0;
+  /// Share of the profile card that sits over the hero so it straddles the
+  /// banner bottom (reference layout ~30–40% on BG, rest below).
+  static const _cardOnHeroFraction = 0.35;
 
   @override
   Widget build(BuildContext context) {
-    final stackH = _heroH + _cardBodyBelowOverlap - _cardOverlap;
+    final cardTop =
+        _heroH - _cardOnHeroFraction * _ProfileCard.estimatedLayoutHeight;
+    final stackH = cardTop + _ProfileCard.estimatedLayoutHeight;
     return SizedBox(
       height: stackH,
       width: double.infinity,
@@ -150,14 +145,30 @@ class _ProfileHero extends StatelessWidget {
             child: Image.asset(
               'assets/images/about-bg.png',
               fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
+              alignment: Alignment.center,
             ),
           ),
           Positioned(
-            top: _heroH - _cardOverlap,
-            left: 16,
-            right: 16,
-            child: const _ProfileCard(),
+            top: cardTop,
+            left: 0,
+            right: 0,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                const hPad = 16.0;
+                var w = constraints.maxWidth;
+                if (!w.isFinite || w <= 0) {
+                  w = MediaQuery.sizeOf(context).width;
+                }
+                final cardW = (w - 2 * hPad).clamp(0.0, double.infinity);
+                return Align(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    width: cardW,
+                    child: const _ProfileCard(),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -168,7 +179,9 @@ class _ProfileHero extends StatelessWidget {
 class _ProfileCard extends StatelessWidget {
   const _ProfileCard();
 
-  static const _photoH = 220.0;
+  static const _photoH = 308.0;
+  /// Used by [_ProfileHero] overlap math (photo + padding + typical bio wrap).
+  static const estimatedLayoutHeight = 440.0;
 
   @override
   Widget build(BuildContext context) {
@@ -192,21 +205,7 @@ class _ProfileCard extends StatelessWidget {
                   Image.asset(
                     'assets/images/profs.png',
                     fit: BoxFit.cover,
-                    alignment: Alignment.topCenter,
-                  ),
-                  DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [
-                          Colors.black.withValues(alpha: 0.72),
-                          Colors.black.withValues(alpha: 0.35),
-                          Colors.transparent,
-                        ],
-                        stops: const [0.0, 0.45, 1.0],
-                      ),
-                    ),
+                    alignment: Alignment.center,
                   ),
                   Positioned(
                     left: 14,
@@ -219,7 +218,7 @@ class _ProfileCard extends StatelessWidget {
                         Text(
                           'Prof. M.N. Huda',
                           style: AppFonts.silkSerif(
-                            color: Colors.white,
+                            color: AboutScreen._nameBlack,
                             fontSize: 22,
                             fontWeight: FontWeight.w700,
                             height: 1.15,
@@ -229,7 +228,7 @@ class _ProfileCard extends StatelessWidget {
                         Text(
                           'Dermatologist, Sexologist & Venereologist',
                           style: AppFonts.poppins(
-                            color: Colors.white.withValues(alpha: 0.95),
+                            color: AboutScreen._roleSubtitle,
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             height: 1.25,
@@ -248,7 +247,7 @@ class _ProfileCard extends StatelessWidget {
                 style: AppFonts.poppins(
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
-                  color: AboutScreen._bioBody,
+                  color: AboutScreen._headingBrown,
                   height: 1.45,
                 ),
               ),
@@ -270,8 +269,8 @@ class _SectionTitle extends StatelessWidget {
     return Text(
       text,
       style: AppFonts.silkSerif(
-        fontSize: 20,
-        fontWeight: FontWeight.w700,
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
         color: AboutScreen._headingBrown,
         height: 1.2,
       ),
@@ -301,8 +300,8 @@ class _CredentialCard extends StatelessWidget {
               credential.title,
               style: AppFonts.poppins(
                 fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AboutScreen._cardTitle,
+                fontWeight: FontWeight.w500,
+                color: AboutScreen._headingBrown,
                 height: 1.25,
               ),
             ),
@@ -387,7 +386,7 @@ class _AboutCta extends StatelessWidget {
                 width: _FooterActions._iconSize,
                 height: _FooterActions._iconSize,
                 colorFilter: const ColorFilter.mode(
-                  AboutScreen._ctaFg,
+                  AboutScreen._ctaText,
                   BlendMode.srcIn,
                 ),
               ),
@@ -401,7 +400,7 @@ class _AboutCta extends StatelessWidget {
                   style: AppFonts.poppins(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    color: AboutScreen._ctaFg,
+                    color: AboutScreen._ctaText,
                     height: 1.15,
                   ),
                 ),
